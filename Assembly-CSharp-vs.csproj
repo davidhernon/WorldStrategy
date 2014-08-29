@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\Hex.cs" />
+     <Compile Include="Assets\Map.cs" />
      <Compile Include="Assets\Sources\LightningBolt.cs" />
      <Compile Include="Assets\TerrainFunctions.cs" />
      <Compile Include="Assets\World.cs" />
@@ -56,6 +57,7 @@
      <Compile Include="Assets\World4.cs" />
      <Compile Include="Assets\World5.cs" />
      <Compile Include="Assets\World6.cs" />
+     <Compile Include="Assets\World7.cs" />
      <None Include="Assets\Shader2.shader" />
      <None Include="Assets\Vertex Colored.shader" />
      <None Include="Assets\SimpleShader.shader" />

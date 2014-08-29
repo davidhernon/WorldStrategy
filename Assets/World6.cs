@@ -31,7 +31,7 @@ public class World6 : MonoBehaviour {
 	private static int y_off = 1;
 
 	public static Vector2 shift = new Vector2(0,0);
-	public static float zoom = 0.1f;
+	public static float zoom = 0.5f;
 
 		//rows go sideways across
 		//cols go down
@@ -96,35 +96,35 @@ public class World6 : MonoBehaviour {
 		float z = transform.position.z;
 		terrain = new Hex[num_row, num_col];
 		initHex();
-		terrain = TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
+		//terrain = TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
 		GenerateHeightMap ();
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
+		//TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
 		//Generate the Hexes
 		CreateHexes(z, texture);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
-		moisture = TerrainFunctions.createMoistureMap(num_row, num_col);
+		//TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
+		//moisture = TerrainFunctions.createMoistureMap(num_row, num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		TerrainFunctions.setCoast(terrain,num_row,num_col);
+		//TerrainFunctions.setCoast(terrain,num_row,num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
 
-		terrain = TerrainFunctions.iterateOverWater(terrain, num_row, num_col);
+		//terrain = TerrainFunctions.iterateOverWater(terrain, num_row, num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
 		
-		List<Vector3> rivers = TerrainFunctions.addRivers(terrain, num_row, num_col);
+		//List<Vector3> rivers = TerrainFunctions.addRivers(terrain, num_row, num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		TerrainFunctions.addRiversToBoard(rivers);
+		//TerrainFunctions.addRiversToBoard(rivers);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		for(int i=0; i<50; i++){
+		/*for(int i=0; i<50; i++){
 			rivers = TerrainFunctions.addRivers(terrain, num_row, num_col);
 			TerrainFunctions.addRiversToBoard(rivers);
-		}
+		}*/
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		terrain = TerrainFunctions.initializeBiomes(terrain, moisture, num_row, num_col);
+		//terrain = TerrainFunctions.initializeBiomes(terrain, moisture, num_row, num_col);
 		///Debug.Log(waterHasHeight(terrain,num_row,num_col));
-		TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
+		//TerrainFunctions.fixCoastHeight(ref terrain,num_row,num_col);
 		//Debug.Log(waterHasHeight(terrain,num_row,num_col));
 
 		//Add Hexes to the Board
@@ -132,7 +132,7 @@ public class World6 : MonoBehaviour {
 		BuildMesh ();
 
 		//Add values and modifiers to hexes
-		terrain = TerrainFunctions.initTerrainValues(terrain,num_row,num_col);
+		//terrain = TerrainFunctions.initTerrainValues(terrain,num_row,num_col);
 
 		//GetComponent<MeshCollider>().mesh = mesh;
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
@@ -171,7 +171,8 @@ public class World6 : MonoBehaviour {
 		int c = num_col*3 + 1;
 		height_map = new double[r+3,c+4];
 
-		for (int i=0; i<r+3; i++) {
+
+	/*	for (int i=0; i<r+3; i++) {
 						for (int j=0; j<c+4; j++) {
 								
 								if(isBorder (i,j,r,c)){
@@ -189,7 +190,43 @@ public class World6 : MonoBehaviour {
 									}
 								}
 						}
+				}*/
+
+		/*	for (int i=0; i<r+3; i++) {
+				for(int j=0; j<c+4; j++){
+				//	double sc = 0.0;
+					//ERROR DO WE NEED SC?
+					//	sc = num_row - (i % num_row);
+					//	sc = sc / num_row;
+						pos = zoom * (new Vector2(i,j)) + shift;
+						noise = Mathf.PerlinNoise(pos.x, pos.y);
+						height_map[i,j] = (double)(noise*max_height);
+						if(height_map[i,j] > ef_max_height){
+							ef_max_height = (float)height_map[i,j];
+						}
 				}
+			}*/
+			double[] histogram = new double[(r+3)*(c+4)];
+			int count = 0;
+			for (int i=0; i<r+3; i++) {
+				for(int j=0; j<c+4; j++){
+					pos = zoom * (new Vector2(i,j)) + shift;
+					height_map[i,j] = (double)(Mathf.PerlinNoise(pos.x, pos.y)*max_height);
+					histogram[count] = height_map[i,j];
+					count++;
+				}
+			}
+			histogram = sort_doubles(histogram, (r+3)*(c+4));
+			for (int i=0; i<r+3; i++) {
+				for(int j=0; j<c+4; j++){
+					int tmp = (int)histogram[(int)((0.4)*((r)*(c)))];
+					if(height_map[i,j] <= tmp){
+						height_map[i,j] = tmp;
+					}
+				}
+			}
+
+
 	}
 
 	//Boolean function to check for borders, used to set height to 0 in getElevation()
@@ -266,9 +303,9 @@ public class World6 : MonoBehaviour {
 				int x_hex = ((2 * x + 1) * 2 + x_o);
 				int y_hex = (6 * (y / 2) + 2 + y_o);
 
-				if(terrain[cur_x, cur_y].type == "water" || terrain[cur_x, cur_y].type == "shallow_water" || terrain[cur_x, cur_y].type == "deep_water"){
+				/*if(terrain[cur_x, cur_y].type == "water" || terrain[cur_x, cur_y].type == "shallow_water" || terrain[cur_x, cur_y].type == "deep_water"){
 					return 0;
-				}
+				}*/
 				
 				//Debug.Log(cur_x);
 
@@ -1013,5 +1050,23 @@ public class World6 : MonoBehaviour {
 			return false;
 		}
 
+	public static double[] sort_doubles(double[] input, int length){
+		double[] output = new double[length];
+		for(int i = 0; i < length; i++){
+			double min = input[i];
+			int placeholder = 0;
+			for(int j = i; j < length; i++){
+				if(input[j] <= min){
+					min = input[j];
+					placeholder = j;
+				}
+			}
+			double tmp = input[i];
+			input[i] = min;
+			input[placeholder] = tmp;
+
+		}
+		return input;
+	}
 
 }
