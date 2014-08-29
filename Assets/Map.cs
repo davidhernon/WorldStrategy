@@ -11,18 +11,18 @@ using System.Collections;
 
 public class Map : MonoBehaviour {
 
-	private Hex[,] terrain;
+	public Hex[,] terrain;
 	private int num_row = 10;
 	private int num_col = 10;
 	private int x_off = 1;
 	private int y_off = 1;
 	private Vector2 shift = new Vector2(0,0);
-	private float zoom = 0.5f;
+	private float zoom = 0.05f;
 	private double[,] height_map;
 	private double[] histogram;
 	private float noise = 0.0f;
 	private static int scale = 1;
-	private static float max_height = (5.0f) * (scale);
+	private static float max_height = (20.0f) * (scale);
 	private int cur_x = 0;
 	private int cur_y = 0;
 	private int hex_count = 0;
@@ -34,6 +34,8 @@ public class Map : MonoBehaviour {
 
 	public Map(int num_row, int num_col){
 		this.terrain= new Hex[num_row, num_col];
+		this.num_row = num_row;
+		this.num_col = num_col;
 	}
 
 	public Map(int num_row, int num_col, Vector2 sh, float zm){
@@ -47,17 +49,19 @@ public class Map : MonoBehaviour {
 		int inx = 5;
 		int iny = 5;
 
+		// The commented out else section may not be necessary, added it to the code after I forgot how the code worked...
 		for(int i=0; i<num_row; i++){
 			for(int j=0; j < num_col; j++){
 				this.terrain[i,j] = new Hex();
-				if(i==0 || i==num_row-1 || j==0 || j==num_col-1){
-					this.terrain[i,j].type = "water";
+				this.terrain[i,j].type = "land";
+				/*if(i==0 || i==num_row-1 || j==0 || j==num_col-1){
+					this.terrain[i,j].type = "land";
 				}
 				if((i < inx || i > num_row - inx || j < iny || j > num_col - iny) && UnityEngine.Random.Range(0,100) > 50){
 					this.terrain[i,j].type = "water";
 				}else{
-					this.terrain[i,j].type = "land";
-				}
+				//	this.terrain[i,j].type = "land";
+				}*/
 			}
 		}
 		// Reiterate through the array and do "Game of Life"-esque ops
@@ -78,24 +82,47 @@ public class Map : MonoBehaviour {
 		int r = num_row*4;
 		int c = num_col*3 + 1;
 		height_map = new double[r+3,c+4];
+		double min = 100.0;
+		double max = -1.0;
 
 		for (int i=0; i<r+3; i++) {
 			for(int j=0; j<c+4; j++){
 				pos = zoom * (new Vector2(i,j)) + shift;
 				height_map[i,j] = (double)(Mathf.PerlinNoise(pos.x, pos.y)*max_height);
+				if(height_map[i,j] < min){
+					min = height_map[i,j];
+				}
+				if(height_map[i,j] > max){
+					max = height_map[i,j];
+				}
+			}
+		}
+		Debug.Log("max: " + max + " min: " + min);
+		double diff = max - min;
+		double inc = diff *(0.1);
+		inc += min;
+
+		for (int i=0; i<r+3; i++) {
+			for(int j=0; j<c+4; j++){
+				height_map[i,j] -= inc;
+				if(height_map[i,j] - inc > 0.0){
+					height_map[i,j] -= inc;
+				}else{
+					height_map[i,j] = 0.0;
+				}
 			}
 		}
 
 	}
 
 // Create all the Hexes for the Map
-	public void CreateHexesBoard(){
+	public void createHexBoard(){
 		for (int i=0; i<num_col; i++) {
 			for (int j=0; j<num_row; j++) {
 				if(i % 2 == 0){
-					BuildHex(i,j, false);
+					buildHex(i,j, false);
 				}else{
-					BuildHex(i,j, true);
+					buildHex(i,j, true);
 				}
 			}
 		}
@@ -103,7 +130,7 @@ public class Map : MonoBehaviour {
 
 
 // Build a Hex vertices for all Hexes in terrain
-	public 	void BuildHex(int y, int x, bool odd){
+	public 	void buildHex(int y, int x, bool odd){
 
 			x_off = 0;
 			y_off = 0;
@@ -137,8 +164,16 @@ public class Map : MonoBehaviour {
 			hex_count++;
 	}
 
+	public int getCurX(){
+		return this.cur_x;
+	}
+
+	public int getCurY(){
+		return this.cur_y;
+	}
+
 // Returns the elevation at a specific vertex
-	int getElevation(int x, int y, int x_o, int y_o, int vertex){
+	public int getElevation(int x, int y, int x_o, int y_o, int vertex){
 
 		//print ("x: " + x + " " + y + " center at: " + ((2 * x + 1) * 2 + x_o) + " and " + (6 * (y / 2) + 2 + y_o));
 		int x_hex = ((2 * x + 1) * 2 + x_o);
