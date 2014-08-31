@@ -8,7 +8,7 @@ public class World7 : MonoBehaviour {
 	public static Map map;
 	private Mesh mesh;
 	private GameObject mesh_terrain;
-	public static int num_row = 20;
+	public static int num_row = 64;
 	public static int num_col = 0;
 	private static int x_off = 0;
 	private static int y_off = 0;

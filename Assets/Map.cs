@@ -17,7 +17,7 @@ public class Map : MonoBehaviour {
 	private int x_off = 1;
 	private int y_off = 1;
 	private Vector2 shift = new Vector2(0,0);
-	private float zoom = 0.05f;
+	private float zoom = 0.02f;
 	private double[,] height_map;
 	private double[] histogram;
 	private float noise = 0.0f;
@@ -99,7 +99,7 @@ public class Map : MonoBehaviour {
 		}
 		Debug.Log("max: " + max + " min: " + min);
 		double diff = max - min;
-		double inc = diff *(0.1);
+		double inc = diff *(0.2);
 		inc += min;
 
 		for (int i=0; i<r+3; i++) {
