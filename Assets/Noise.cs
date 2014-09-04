@@ -44,7 +44,7 @@ public class Noise : MonoBehaviour {
 		//int samplePeriod = 1; //Should calculate 2^k where I believe k is the octave but I am not positive
 		int samplePeriod = Mathf.Power(2,c); //Maybe?
 		float sampleFrequency = 1.0f/ (float)samplePeriod;
-		float[,] smooth_noise = new float[width,height]
+		float[,] smooth_noise = new float[width,height];
 
 		for(int i=0; i < width; i++){
 			int sample_io = (i / samplePeriod) * samplePeriod;
@@ -72,7 +72,7 @@ public class Noise : MonoBehaviour {
 	   return x0 * (1 - alpha) + alpha * x1;
 	}
 
-	float[,] GeneratePerlinNoise(float[][] baseNoise, int octaveCount){
+	public float[,] GeneratePerlinNoise(float[,] baseNoise, int octaveCount){
 	 
 	   float[,,] smoothNoise = new float[octaveCount,,]; //an array of 2D arrays containing
 	 
