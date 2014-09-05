@@ -12,8 +12,8 @@ public class Noise : MonoBehaviour {
 	private int width = 0;
 	private int height = 0;
 	private int octave = 4;
-	private float[,] base_noise;
-	private float[,] perlin_noise;
+	private double[,] base_noise;
+	private double[,] perlin_noise;
 
 	public Noise(int x, int y){
 		this.width = x;
@@ -30,63 +30,70 @@ public class Noise : MonoBehaviour {
 		this.perlin_noise = GeneratePerlinNoise(this.base_noise,this.octave);
 	}
 
-	public float [,] generateWhiteNoise(){
-		float[,] base_noise = new float[width,height];
+	public double [,] generateWhiteNoise(){
+		double[,] base_noise = new double[width,height];
 		for(int i=0; i<width; i++){
 			for (int j=0; j<height; j++){
-				base_noise[i,j] = (float)UnityEngine.Random.Range(0.0,1.0);
+				base_noise[i,j] = (double)UnityEngine.Random.Range(0.0f,1.0f);
 			}
 		}
 		return base_noise;
 	}
 
-	public float[,] generateSmoothNoise(float[,] base_noise, int c){
+	public double[,] generateSmoothNoise(double[,] baseNoise, int c){
 		//int samplePeriod = 1; //Should calculate 2^k where I believe k is the octave but I am not positive
-		int samplePeriod = Mathf.Power(2,c); //Maybe?
-		float sampleFrequency = 1.0f/ (float)samplePeriod;
-		float[,] smooth_noise = new float[width,height];
+		int samplePeriod = (int)Mathf.Pow(2.0f,c*1.0f); //Maybe?
+		double sampleFrequency = 1.0f/ (double)samplePeriod;
+		double[,] smooth_noise = new double[width,height];
+		int sample_i0 = 0;
+		int sample_i1 = 0;
 
 		for(int i=0; i < width; i++){
-			int sample_io = (i / samplePeriod) * samplePeriod;
-			int sample_il = (sample_io + samplePeriod) % width;
-			float horizontal_blend = (i-sample_io) * sampleFrequency;
+			sample_i0 = ((int)(i / samplePeriod)) * samplePeriod;
+			sample_i1 = (sample_i0 + samplePeriod) % width;
+			double horizontal_blend = (i-sample_i0) * sampleFrequency;
 
 			for(int j=0; j<height; j++){
-				int sample_j0 = (j / samplePeriod)*samplePeriod;
-				int sample_j1 = (sample_j0 + samplePeri) * samplePeriod;
-				float vertical_blend = (j-sample_j0) * sampleFrequency;
+				int sample_j0 = ((int)(j / samplePeriod))*samplePeriod;
+				int sample_j1 = (sample_j0 + samplePeriod) * samplePeriod;
+				double vertical_blend = (j-sample_j0) * sampleFrequency;
 
-				float top = Interpolate(baseNoise[sample_i0,sample_j0],
+				double top = Interpolate(baseNoise[sample_i0,sample_j0],
 					baseNoise[sample_i1, sample_j0], horizontal_blend);
-
-				float bottom = Interpolate(baseNoise[sample_i0,sample_j1],
-					baseNoise[sample_i1, sample_j1], horizontal_blend);
-
+				Debug.Log(width + " " + height + " " + sample_j1 + " " + sample_i1);
+				//double bottom = Interpolate(baseNoise[sample_i0,sample_j1],
+				//	baseNoise[sample_i1, sample_j1], horizontal_blend);
+double bottom = 0.0;
 				smooth_noise[i,j] = Interpolate(top, bottom, vertical_blend);
 			}
 		}
 		return smooth_noise;
 	}
 
-	public float Interpolate(float x0, float x1, float alpha){
+	public double Interpolate(double x0, double x1, double alpha){
 	   return x0 * (1 - alpha) + alpha * x1;
 	}
 
-	public float[,] GeneratePerlinNoise(float[,] baseNoise, int octaveCount){
+	public double[,] GeneratePerlinNoise(double[,] baseNoise, int octaveCount){
 	 
-	   float[,,] smoothNoise = new float[octaveCount,,]; //an array of 2D arrays containing
+	   double[,,] smoothNoise = new double[octaveCount,width,height]; //an array of 2D arrays containing
 	 
-	   float persistance = 0.5f;
+	   double persistance = 0.5f;
 	 
 	   //generate smooth noise
 	   for (int i = 0; i < octaveCount; i++)
 	   {
-	       smoothNoise[i] = generateSmoothNoise(base_noise, i);
+	       double [,] smoothNoiseIteration = generateSmoothNoise(base_noise, i);
+	       for(int x = 0; x < width; x++){
+	       	for(int y = 0; y < height; y++){
+	       		smoothNoise[i,x,y] = smoothNoiseIteration[x,y];
+	       	}
+	       }
 	   }
 	 
-	    float[,] perlinNoise = new float[width,height];
-	    float amplitude = 1.0f;
-	    float totalAmplitude = 0.0f;
+	    double[,] perlinNoise = new double[width,height];
+	    double amplitude = 1.0f;
+	    double totalAmplitude = 0.0f;
 	 
 	    //blend noise together
 	    for (int c = octaveCount - 1; c >= 0; c--){
@@ -114,7 +121,7 @@ public class Noise : MonoBehaviour {
 	   return perlinNoise;
 	}
 
-	public getNoiseResults(){
+	public double [,] getNoiseResults(){
 		return perlin_noise;
 	}
 
