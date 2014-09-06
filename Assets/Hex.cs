@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -19,6 +19,7 @@ public class Hex {
 	public float defense = 0f;
 	public float industry = 0f;
 	public float food = 0f;
+	public double avg_height = 0.0;
 
 		public Hex(){
 			if(UnityEngine.Random.Range(0,100) > 50)
@@ -35,6 +36,7 @@ public class Hex {
 			this.bottom = new Vector3();
 
 			this.vertices = new Vector3[7] {this.top,this.leftTop,this.rightTop,this.center,this.leftBot,this.rightBot,this.bottom};
+			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
 		}
 
 		public Hex(Vector3[] vertex_list, int x, int y)
@@ -51,6 +53,7 @@ public class Hex {
 			this.id_list = new int[7];
 			this.scale = 1;
 			this.vertices = vertex_list;
+			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
 		}
 
 		public Hex(Vector3[] vertex_list, int x, int y, int scl)
@@ -67,6 +70,7 @@ public class Hex {
 			this.id_list = new int[7];
 			this.scale = scl;
 			this.vertices = vertex_list;
+			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
 		}
 
 		public bool inBoundingBox(Vector3 point){
@@ -129,6 +133,7 @@ public class Hex {
 			this.id_list = new int[7];
 			this.scale = 1;
 			this.vertices = vertex_list;
+			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
 		}
 
 		public void printHex(){
@@ -178,11 +183,17 @@ public class Hex {
 			this.addNoiseToValues();
 
 		}
-			public void addNoiseToValues(){
+
+		public void addNoiseToValues(){
 				this.defense += (((float)UnityEngine.Random.Range(-5,5) % this.defense) / this.defense);
 				this.industry += (((float)UnityEngine.Random.Range(-5,5) % this.industry) / this.industry);
 				this.food += (((float)UnityEngine.Random.Range(-5,5) % this.food) / this.food);
-			}
+		}
+
+		public double getHexAverageElevation(){
+			//Debug.Log ((vertices[0].z + vertices[1].z + vertices[2].z + vertices[3].z + vertices[4].z + vertices[5].z + vertices[6].z)/7f);
+			return this.avg_height;
+		}
 		
 
 	}

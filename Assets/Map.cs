@@ -22,7 +22,7 @@ public class Map : MonoBehaviour {
 	private double[] histogram;
 	private float noise = 0.0f;
 	private static int scale = 1;
-	private static float max_height = (20.0f) * (scale);
+	private static float max_height = (40.0f) * (scale);
 	private int cur_x = 0;
 	private int cur_y = 0;
 	private int hex_count = 0;
@@ -87,8 +87,14 @@ public class Map : MonoBehaviour {
 
 		for (int i=0; i<r+3; i++) {
 			for(int j=0; j<c+4; j++){
-				pos = zoom * (new Vector2(i,j)) + shift;
-				height_map[i,j] = (double)(Mathf.PerlinNoise(pos.x, pos.y)*max_height);
+				Vector2 perlin1 = 0.02f * (new Vector2(i,j)) + shift;
+				//Vector2 perlin2 = (0.009f * (new Vector2(i,j)) + new Vector2(1,1)); //"other config" just incomment lines
+				//Vector2 perlin3 = (0.05f * (new Vector2(i,j)) + new Vector2(1,0));
+				Vector2 perlin2 = (0.009f * (new Vector2(i,j)));
+				Vector2 perlin3 = (0.05f * (new Vector2(i,j)));
+				height_map[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.6 +
+											Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.2 +
+											Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.2);
 				if(height_map[i,j] < min){
 					min = height_map[i,j];
 				}
@@ -97,9 +103,24 @@ public class Map : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log("max: " + max + " min: " + min);
+
+		// Other method of generating noise, not configured
+	/*	SimplexNoiseGenerator simplex = new SimplexNoiseGenerator();
+		for (int i=0; i<r+3; i++) {
+			for(int j=0; j<c+4; j++){
+				pos = zoom * (new Vector2(i,j)) + shift;
+				height_map[i,j] = (double)simplex.coherentNoise(i*1f,j*1f,0f,5,50,20f,0.5f,0.5f);
+				if(height_map[i,j] < min){
+					min = height_map[i,j];
+				}
+				if(height_map[i,j] > max){
+					max = height_map[i,j];
+				}
+			}
+		}*/
+
 		double diff = max - min;
-		double inc = diff *(0.2);
+		double inc = diff *(0.09); //0.13 with other config
 		inc += min;
 
 		for (int i=0; i<r+3; i++) {
@@ -134,7 +155,6 @@ public class Map : MonoBehaviour {
 
 			x_off = 0;
 			y_off = 0;
-				
 			int hy = y;
 			int hx = x;
 
@@ -147,7 +167,9 @@ public class Map : MonoBehaviour {
 					y_off = 3;
 			}
 
-			Vector3[] vertices;
+
+
+			Vector3[] vertices = new Vector3[7];
 
 				vertices = new Vector3[] {
 							new Vector3 ((((((2 * x) + 1) * 2) + x_off) * scale), getElevation (x, y, x_off, y_off, 0), ((((y / 2) * 6) + y_off) * scale)),
@@ -158,8 +180,11 @@ public class Map : MonoBehaviour {
 							new Vector3 (((4 * (x + 1) + x_off) * scale), getElevation (x, y, x_off, y_off, 5), (((y / 2) * 6) + y_off + 3) * scale),
 							new Vector3 ((((((2 * x) + 1) * 2) + x_off) * scale), getElevation (x, y, x_off, y_off, 6), (((y / 2) * 6) + y_off + 4) * scale)
 				};
+
+
 			
 			//terrain [hx, hy] = new Hex (vertices, hx, hy);
+
 			terrain[hx,hy].addParams(vertices, hx, hy);
 			hex_count++;
 	}
@@ -197,6 +222,21 @@ public class Map : MonoBehaviour {
 		} else {
 				return 1;
 		}
-}
+	}
+
+	public void setHexType(){
+
+		for(int i=0; i<num_row; i++){
+			for(int j=0; j < num_col; j++){
+				//Debug.Log("avg height" + terrain[i,j].center);
+				if(terrain[i,j].getHexAverageElevation() <= 0.0){
+					terrain[i,j].type = "water";
+				}else{
+					terrain[i,j].type = "land";
+				}
+			}
+		}
+
+	}
 	
 }
