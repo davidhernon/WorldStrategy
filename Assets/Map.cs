@@ -26,6 +26,9 @@ public class Map : MonoBehaviour {
 	private int cur_x = 0;
 	private int cur_y = 0;
 	private int hex_count = 0;
+	private double max = -1.0;
+	private double water_distribution = 0.13;
+	private double min = 100.0;
 
 
 	public Map(){
@@ -75,6 +78,28 @@ public class Map : MonoBehaviour {
 		}*/
 	}
 
+	public double[,] generateNoiseArray(double[,] array, int rows, int cols){
+
+		for (int i=0; i < rows; i++) {
+			for (int j=0; j < cols; j++) {
+				Vector2 perlin1 = 0.02f * (new Vector2(i,j)) + shift;
+				Vector2 perlin2 = (0.01f * (new Vector2(i,j)) + shift);
+				Vector2 perlin3 = (0.05f * (new Vector2(i,j)));
+				array[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.5 +
+				                           Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.5 +
+				                           Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.3);
+				if(array[i,j] < min){
+					min = array[i,j];
+				}
+				if(array[i,j] > max){
+					max = array[i,j];
+				}
+			}
+		}
+
+		return array;
+	}
+
 // Generates a 2D array of doubles to be used as height values for tile points
 // histogram is a sorted array of height values used to find appropriate water level
 	public void generateHeightMap(){
@@ -82,19 +107,21 @@ public class Map : MonoBehaviour {
 		int r = num_row*4;
 		int c = num_col*3 + 1;
 		height_map = new double[r+3,c+4];
-		double min = 100.0;
-		double max = -1.0;
+		min = 100.0;
+		max = -1.0;
 
-		for (int i=0; i<r+3; i++) {
+		height_map = generateNoiseArray (height_map, r + 3, c + 4);
+
+		/*for (int i=0; i<r+3; i++) {
 			for(int j=0; j<c+4; j++){
 				Vector2 perlin1 = 0.02f * (new Vector2(i,j)) + shift;
 				//Vector2 perlin2 = (0.009f * (new Vector2(i,j)) + new Vector2(1,1)); //"other config" just incomment lines
 				//Vector2 perlin3 = (0.05f * (new Vector2(i,j)) + new Vector2(1,0));
-				Vector2 perlin2 = (0.009f * (new Vector2(i,j)));
+				Vector2 perlin2 = (0.01f * (new Vector2(i,j)) + shift);
 				Vector2 perlin3 = (0.05f * (new Vector2(i,j)));
-				height_map[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.6 +
-											Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.2 +
-											Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.2);
+				height_map[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.5 +
+											Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.5 +
+											Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.3);
 				if(height_map[i,j] < min){
 					min = height_map[i,j];
 				}
@@ -103,7 +130,7 @@ public class Map : MonoBehaviour {
 				}
 			}
 		}
-
+		*/
 		// Other method of generating noise, not configured
 	/*	SimplexNoiseGenerator simplex = new SimplexNoiseGenerator();
 		for (int i=0; i<r+3; i++) {
@@ -120,8 +147,11 @@ public class Map : MonoBehaviour {
 		}*/
 
 		double diff = max - min;
-		double inc = diff *(0.09); //0.13 with other config
+		double inc = diff * water_distribution;
 		inc += min;
+
+		//The following line will turn off the water
+		//inc = 0.0;
 
 		for (int i=0; i<r+3; i++) {
 			for(int j=0; j<c+4; j++){
@@ -228,7 +258,6 @@ public class Map : MonoBehaviour {
 
 		for(int i=0; i<num_row; i++){
 			for(int j=0; j < num_col; j++){
-				//Debug.Log("avg height" + terrain[i,j].center);
 				if(terrain[i,j].getHexAverageElevation() <= 0.0){
 					terrain[i,j].type = "water";
 				}else{

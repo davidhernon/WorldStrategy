@@ -259,16 +259,16 @@ public class World7 : MonoBehaviour {
 			UnityEngine.Random.Range(0.0f,1.0f),
 			UnityEngine.Random.Range(0.0f,1.0f), 
 			UnityEngine.Random.Range(0.0f,1.0f));*/
-		Color rand = new Color();
+		Color color = new Color();
 
 		if(map.terrain[x,y].type == "land"){
-			rand = Color.green;
+			color = Color.green;
 		}else if(map.terrain[x,y].type == "water"){
-			rand = Color.cyan;
+			color = Color.cyan;
 		}
 
 		for(int i=0; i < count; i++){
-			newColor.Add(rand);
+			newColor.Add(color);
 		}
 	}
 
