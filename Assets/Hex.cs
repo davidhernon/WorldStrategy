@@ -20,6 +20,8 @@ public class Hex {
 	public float industry = 0f;
 	public float food = 0f;
 	public double avg_height = 0.0;
+	public double rainfall = 0.0;
+	public double orig_height = 0.0;
 
 		public Hex(){
 			if(UnityEngine.Random.Range(0,100) > 50)
@@ -136,6 +138,11 @@ public class Hex {
 			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
 		}
 
+		public double calcAvgHeight(){
+			this.avg_height = ((double)(this.top.y+this.leftTop.y+this.rightTop.y+this.center.y+this.leftBot.y+this.rightBot.y+this.bottom.y))/-7.0;
+			return this.avg_height;
+		}
+
 		public void printHex(){
 			Debug.Log(this.top + " " + this.leftTop + " " + this.rightTop + " " + this.center + " " + this.leftBot + " " + this.rightBot + " " + this.bottom);
 		}
@@ -193,6 +200,10 @@ public class Hex {
 		public double getHexAverageElevation(){
 			//Debug.Log ((vertices[0].z + vertices[1].z + vertices[2].z + vertices[3].z + vertices[4].z + vertices[5].z + vertices[6].z)/7f);
 			return this.avg_height;
+		}
+
+		public string getTileInfo(){
+			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y);
 		}
 		
 

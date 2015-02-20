@@ -144,7 +144,7 @@ public class World6 : MonoBehaviour {
 	
 	// Update constantly raycasts from the player to the screen in order to return what Hex the user is hovering over
 	void Update () {
-		RaycastHit hit;
+	   RaycastHit hit;
        Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
 		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
 		if(Physics.Raycast(ray2, out hit, 10000f)){

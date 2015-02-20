@@ -6,7 +6,7 @@
      
     SubShader {
         Tags { "RenderType"="Opaque" }
-        LOD 150
+        LOD 500
      
     CGPROGRAM
     #pragma surface surf Lambert vertex:vert

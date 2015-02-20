@@ -9,16 +9,17 @@ using System.Collections;
 
 
 
-public class Map : MonoBehaviour {
+public class Map {
 
 	public Hex[,] terrain;
 	private int num_row = 10;
 	private int num_col = 10;
 	private int x_off = 1;
 	private int y_off = 1;
-	private Vector2 shift = new Vector2(0,0);
+	private Vector2 shift = new Vector2(Random.Range (0.0f,1.0f),Random.Range (0.0f,1.0f));
 	private float zoom = 0.02f;
 	private double[,] height_map;
+	private double[,] depth_map;
 	private double[] histogram;
 	private float noise = 0.0f;
 	private static int scale = 1;
@@ -29,6 +30,13 @@ public class Map : MonoBehaviour {
 	private double max = -1.0;
 	private double water_distribution = 0.13;
 	private double min = 100.0;
+	private double[,] moisture_map;
+	private double effective_max_height = 0.0;
+	private bool no_water = false;
+	private double moisture_max_height = 0.0;
+	private double diff = 0.0;
+	private double inc = 0.0;
+	private double water_height = 0.0;
 
 
 	public Map(){
@@ -56,7 +64,7 @@ public class Map : MonoBehaviour {
 		for(int i=0; i<num_row; i++){
 			for(int j=0; j < num_col; j++){
 				this.terrain[i,j] = new Hex();
-				this.terrain[i,j].type = "land";
+				//this.terrain[i,j].type = "land";
 				/*if(i==0 || i==num_row-1 || j==0 || j==num_col-1){
 					this.terrain[i,j].type = "land";
 				}
@@ -78,16 +86,17 @@ public class Map : MonoBehaviour {
 		}*/
 	}
 
-	public double[,] generateNoiseArray(double[,] array, int rows, int cols){
+	public double[,] generateNoiseArray(double[,] array, int rows, int cols, float[] zoom_array, float[] blend_array){
 
 		for (int i=0; i < rows; i++) {
 			for (int j=0; j < cols; j++) {
-				Vector2 perlin1 = 0.02f * (new Vector2(i,j)) + shift;
-				Vector2 perlin2 = (0.01f * (new Vector2(i,j)) + shift);
-				Vector2 perlin3 = (0.05f * (new Vector2(i,j)));
-				array[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.5 +
-				                           Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.5 +
-				                           Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.3);
+				Vector2 perlin1 = zoom_array[0] * (new Vector2(i,j)) + shift;
+				Vector2 perlin2 = (zoom_array[1] * (new Vector2(i,j)) + shift);
+				Vector2 perlin3 = (zoom_array[2] * (new Vector2(i,j)));
+				array[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*blend_array[0] +
+				                           Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*blend_array[1] +
+				                           Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*blend_array[2]);
+
 				if(array[i,j] < min){
 					min = array[i,j];
 				}
@@ -100,6 +109,16 @@ public class Map : MonoBehaviour {
 		return array;
 	}
 
+	public void generateMoistureMap(){
+		moisture_map = new double[num_row, num_col];
+		moisture_map = generateNoiseArray (new double[num_row, num_col], num_row, num_col, new float[]{0.01f,0.03f,0.05f}, new float[] {
+			0.8f,
+			0.3f,
+			0.0f
+		});
+		moisture_max_height = max - min;
+	}
+
 // Generates a 2D array of doubles to be used as height values for tile points
 // histogram is a sorted array of height values used to find appropriate water level
 	public void generateHeightMap(){
@@ -107,62 +126,36 @@ public class Map : MonoBehaviour {
 		int r = num_row*4;
 		int c = num_col*3 + 1;
 		height_map = new double[r+3,c+4];
+		moisture_map = new double[r+3,c+4];
 		min = 100.0;
 		max = -1.0;
 
-		height_map = generateNoiseArray (height_map, r + 3, c + 4);
+		height_map = generateNoiseArray (height_map, r + 3, c + 4, new float[]{0.02f,0.01f,0.05f}, new float[]{0.5f,0.5f,0.3f});
 
-		/*for (int i=0; i<r+3; i++) {
-			for(int j=0; j<c+4; j++){
-				Vector2 perlin1 = 0.02f * (new Vector2(i,j)) + shift;
-				//Vector2 perlin2 = (0.009f * (new Vector2(i,j)) + new Vector2(1,1)); //"other config" just incomment lines
-				//Vector2 perlin3 = (0.05f * (new Vector2(i,j)) + new Vector2(1,0));
-				Vector2 perlin2 = (0.01f * (new Vector2(i,j)) + shift);
-				Vector2 perlin3 = (0.05f * (new Vector2(i,j)));
-				height_map[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*0.5 +
-											Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*0.5 +
-											Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*0.3);
-				if(height_map[i,j] < min){
-					min = height_map[i,j];
-				}
-				if(height_map[i,j] > max){
-					max = height_map[i,j];
-				}
-			}
-		}
-		*/
-		// Other method of generating noise, not configured
-	/*	SimplexNoiseGenerator simplex = new SimplexNoiseGenerator();
-		for (int i=0; i<r+3; i++) {
-			for(int j=0; j<c+4; j++){
-				pos = zoom * (new Vector2(i,j)) + shift;
-				height_map[i,j] = (double)simplex.coherentNoise(i*1f,j*1f,0f,5,50,20f,0.5f,0.5f);
-				if(height_map[i,j] < min){
-					min = height_map[i,j];
-				}
-				if(height_map[i,j] > max){
-					max = height_map[i,j];
-				}
-			}
-		}*/
-
-		double diff = max - min;
-		double inc = diff * water_distribution;
+		diff = max - min;
+		inc = diff * water_distribution;
 		inc += min;
+		effective_max_height = diff - inc;
+		depth_map = new double[r+3, c+4];
 
 		//The following line will turn off the water
-		//inc = 0.0;
+		if(no_water)
+			inc = 0.0;
 
 		for (int i=0; i<r+3; i++) {
 			for(int j=0; j<c+4; j++){
-				height_map[i,j] -= inc;
-				if(height_map[i,j] - inc > 0.0){
-					height_map[i,j] -= inc;
+				depth_map[i,j] = height_map[i,j] - (2*inc);
+				if(i<=2 || i >= r-1 || j <= 2 || j >= c-1){
+					height_map[i,j]=0.0;
+					continue;
+				}
+				if(height_map[i,j] - 2*inc > 0.0){
+					height_map[i,j] -= 2*inc;
 				}else{
 					height_map[i,j] = 0.0;
 				}
 			}
-		}
+		}		
 
 	}
 
@@ -177,6 +170,7 @@ public class Map : MonoBehaviour {
 				}
 			}
 		}
+		//setWaterHeight();
 	}
 
 
@@ -254,18 +248,269 @@ public class Map : MonoBehaviour {
 		}
 	}
 
-	public void setHexType(){
+	// Returns the depth over a hex
+	public int getDepth(int x, int y, int x_o, int y_o, int vertex){
 
-		for(int i=0; i<num_row; i++){
+		//print ("x: " + x + " " + y + " center at: " + ((2 * x + 1) * 2 + x_o) + " and " + (6 * (y / 2) + 2 + y_o));
+		int x_hex = ((2 * x + 1) * 2 + x_o);
+		int y_hex = (6 * (y / 2) + 2 + y_o);
+
+		return ((-((int)height_map[x_hex,y_hex-2])) + (-((int)height_map[x_hex-2,y_hex-1])) + (-((int)height_map[x_hex+2,y_hex-1])) + (-((int)height_map[x_hex,y_hex])) + (-((int)height_map[x_hex-2,y_hex+1])) + (-((int)height_map[x_hex+2,y_hex+1])) + (-((int)height_map[x_hex,y_hex+2])) / 7);
+	}
+
+	public void setWaterHeight(){
+		Debug.Log("set water height");
+		double local_max = -1.0;
+		double local_min = double.MaxValue;
+		double local_inc = 0.0;
+		for(int i=0; i < num_row; i++){
 			for(int j=0; j < num_col; j++){
-				if(terrain[i,j].getHexAverageElevation() <= 0.0){
-					terrain[i,j].type = "water";
-				}else{
-					terrain[i,j].type = "land";
+				for(int k=0; k < 7; k++){
+					if( (-(terrain[i,j].vertices[k].y)) > local_max)
+						local_max = -(terrain[i,j].vertices[k].y);
+					if( (-(terrain[i,j].vertices[k].y)) < local_min)
+						local_min = -(terrain[i,j].vertices[k].y);
 				}
 			}
 		}
 
+		local_inc = ((max - min) * water_distribution) + min;
+
+		for(int i=0; i < num_row; i++){
+			for(int j=0; j < num_col; j++){
+				for(int k=0; k < 7; k++){
+					// we add inc since vertices are negative
+					if(i == 0 || j == 0 || i == num_row - 1 || j == num_col - 1){
+						terrain[i,j].vertices[k].y = 0f;
+						//terrain[i,j].calcAvgHeight();
+						//Debug.Log("edge set to zero");
+					}
+					else if ( -(terrain[i,j].vertices[k].y) + local_inc > 0.0 ){
+						//Debug.Log("need to reduce height: " + terrain[i,j].vertices[k].y);
+						//terrain[i,j].vertices[k].y += (float)((2f)*inc);
+						//Debug.Log("x,y,vert: " + i + " " + j + " " + (terrain[i,j].vertices[k].y + (2f*local_inc)));
+						terrain[i,j].vertices[k].y += (float)(2f*local_inc);
+						//terrain[i,j].vertices[k].y -= 1000f;
+						//Debug.Log(terrain[i,j].vertices[k].y);
+						//terrain[i,j].calcAvgHeight();
+					}
+					else{
+						//Debug.Log("height low enough i set it to zero");
+						terrain[i,j].vertices[k].y = 0f;
+						//terrain[i,j].calcAvgHeight();
+
+					}
+
+
+
+
+				}
+			}
+		}
+
+		water_height = local_inc + local_min;
+		//effective_max_height = diff - local_inc;
+		//this.terrain = terrain;
+	}
+
+	public void setHexType(){
+
+		for(int i=0; i < num_row; i++){
+			for(int j=0; j < num_col; j++){
+
+				int depth = 0;
+
+			//	if(i!=0 && j != 0 && i <= num_row-1 && j <= num_col -1){
+
+				int x = i;
+				int y = j;
+
+				int x_off = 0;
+				int y_off = 0;
+
+				if (j%2==0) {
+						y--;
+						x_off = 2;
+						y_off = 3;
+				}
+
+				int x_hex = ((2 * x + 1) * 2 + x_off);
+				int y_hex = (6 * (y / 2) + 2 + y_off);
+				//Debug.Log("x,y,depth: " + " " + x_hex + " " + y_hex + " " + depth);
+				depth =  ((-((int)depth_map[x_hex,y_hex-2])) + (-((int)depth_map[x_hex-2,y_hex-1])) + (-((int)depth_map[x_hex+2,y_hex-1])) + (-((int)depth_map[x_hex,y_hex])) + (-((int)depth_map[x_hex-2,y_hex+1])) + (-((int)depth_map[x_hex+2,y_hex+1])) + (-((int)depth_map[x_hex,y_hex+2])) / 7);
+				Debug.Log("x,y,depth,water_height: " + " " + x_hex + " " + y_hex + " " + depth + " " + water_height);
+
+				// }else{
+				// 	depth = (int)inc;
+				// }
+				//Debug.Log(ret + " " + terrain[i,j].getHexAverageElevation());
+
+				// if(i==0 || i == num_row-1 || j==0 || j == num_col-1){
+				// 	terrain[i,j].type = "water";
+				// 	continue;
+				// }
+
+				if(terrain[i,j].getHexAverageElevation() <= 0.0){
+					if(depth > 10){
+						terrain[i,j].type = "deep_water";
+					}else{
+						terrain[i,j].type = "shallow_water";
+					}
+					//terrain[i,j].type = "water";
+				}else if(terrain[i,j].getHexAverageElevation() <= effective_max_height * 0.1){
+					terrain[i,j].type = "sand";
+				}else if(terrain[i,j].getHexAverageElevation() <= effective_max_height * 0.41){
+					terrain[i,j].type = "grass";
+				}else if(terrain[i,j].getHexAverageElevation() <= effective_max_height * 0.65){
+					terrain[i,j].type = "rock";
+				}else if(terrain[i,j].getHexAverageElevation() <= effective_max_height){
+					terrain[i,j].type = "snow";
+				}else{
+					//Debug.Log ("There has been a horrible error!");
+					terrain[i,j].type = "error";
+				}
+
+				//TODO make sure this only happens once, no moisture map just set rainfall directly
+				//terrain[i,j].rainfall = moisture_map[i,j];
+			}
+		}
+
+		for(int i=0; i<num_row; i++){
+			for(int j=0; j < num_col; j++){
+				//Change from Water to Deep Water and Shallow Water
+				if(i != 0 && j != 0 && i != num_row-1 && j != num_col-1){
+					if(terrain[i,j].type == "water" && (neighborHexTypes(i,j,"sand") > 0)){
+						//terrain[i,j].type = "shallow_water";
+						continue;
+					}else if (terrain[i,j].type == "water"){
+						//terrain[i,j].type = "deep_water";
+						if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
+							//terrain[i,j].type = "shallow_water";
+						}
+						// else if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
+						// 	terrain[i,j].type = "shallow_water";
+						// }
+						continue;
+					}
+
+				// continue line should have stopped us from reaching this point as a water tile
+				// this point forward all tiles are land
+
+					if(terrain[i,j].rainfall <= max * 0.43){
+						if(terrain[i,j].type == "grass")
+							terrain[i,j].type = "desert";
+							continue;
+					}else if(terrain[i,j].rainfall <= max * 0.5){
+						if(terrain[i,j].type == "rock"){
+							if(Random.Range(0,100) > 75)
+								terrain[i,j].type = "snow";
+							else if (Random.Range(0,100) > 50)
+								terrain[i,j].type = "tundra";
+						}else if(terrain[i,j].type == "grass" && Random.Range(0,100) > 50){
+							//terrain[i,j].type = "plains";
+						}
+					}else if(terrain[i,j].rainfall <= max * 0.6){
+						if(terrain[i,j].type == "sand" && Random.Range(0,100) > 75){
+							terrain[i,j].type = "marsh";
+						}else if(terrain[i,j].type == "grass" && Random.Range(0,100)  > 33){
+							terrain[i,j].type = "jungle";
+						}
+					}
+				}
+
+			}
+				  
+		}
+
+	}
+
+	public int distanceToOcean(int x, int y, int count, int[,] alreadyChecked){
+
+		if (count > 3) {
+			return count;
+		}
+
+		if(x <= 0 || y <= 0 || x >= num_row-1 || y >= num_col-1){
+			return count;
+		}
+
+		int one = int.MaxValue, two = int.MaxValue, three = int.MaxValue, four = int.MaxValue, five = int.MaxValue, six = int.MaxValue;
+
+		if (terrain [x, y].type == "water" || terrain [x, y].type == "shallow_water" || terrain [x, y].type == "deep_water" || terrain [x, y].type == "error" || terrain [x, y].type == null) 
+			return count;
+		else {
+			if(y%2==0){
+				if(alreadyChecked[x+1, y+1] != 1){
+					alreadyChecked[x+1, y+1] = 1;
+					one = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x, y+1] != 1){
+					alreadyChecked[x, y+1] = 1;
+					two = distanceToOcean (x,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x-1, y] != 1){
+					alreadyChecked[x-1, y] = 1;
+					three = distanceToOcean (x-1,y,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x, y-1] != 1){
+					alreadyChecked[x, y-1] = 1;
+					four = distanceToOcean (1,y-1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x+1, y-1] != 1){
+					alreadyChecked[x+1, y-1] = 1;
+					five = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x+1, y] != 1){
+					alreadyChecked[x+1, y] = 1;
+					six = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				return Mathf.Min (Mathf.Min (Mathf.Min (Mathf.Min (Mathf.Min (one,two), three), four), five), six);
+			}else{
+				if(alreadyChecked[x, y+1] != 1){
+					alreadyChecked[x, y+1] = 1;
+					one = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x+1, y] != 1){
+					alreadyChecked[x+1, y] = 1;
+					two = distanceToOcean (x,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x-1, y+1] != 1){
+					alreadyChecked[x-1, y+1] = 1;
+					three = distanceToOcean (x-1,y,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x-1, y] != 1){
+					alreadyChecked[x-1, y] = 1;
+					four = distanceToOcean (1,y-1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x-1, y-1] != 1){
+					alreadyChecked[x-1, y-1] = 1;
+					five = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				if(alreadyChecked[x, y+1] != 1){
+					alreadyChecked[x, y+1] = 1;
+					six = distanceToOcean (x+1,y+1,count+1,alreadyChecked);
+				}
+				return Mathf.Min (Mathf.Min (Mathf.Min (Mathf.Min (Mathf.Min (one,two), three), four), five), six);
+			}
+		}	
+	}
+
+	public int neighborHexTypes(int i, int j, string type){
+		int count = 0;
+		if(terrain[i+1,j].type == type)
+			count++;
+		if(terrain[i+1,j+1].type == type)
+			count++;
+		if(terrain[i,j+1].type == type)
+			count++;
+		if(terrain[i-1,j].type == type)
+			count++;
+		if(terrain[i-1,j-1].type == type)
+			count++;
+		if(terrain[i,j-1].type == type)
+			count++;
+		
+		return count;
 	}
 	
 }

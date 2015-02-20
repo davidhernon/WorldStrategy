@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+//using System.Collections;
+//using System;
 using System.Collections.Generic;
 
 public class World7 : MonoBehaviour {
@@ -19,9 +19,22 @@ public class World7 : MonoBehaviour {
 	public static List<Vector3> newVertices = new List<Vector3> ();
 	public  static List<int> newTriangles = new List<int> ();
 	public static List<Color> newColor = new List<Color> ();
-
+	public static bool showTile = false;
+	public static GameObject sphere1;
+	public static string tileInfo;
+	private static bool locations_on = false;
+		
+	//cities
+	public static GameObject[] cities;
+	public static double avg_dist = 0.0;
+	public static int  d_count = 0;
+	
+	
 	// Use this for initialization
 	void Start () {
+
+		UnityEngine.Random.seed = (int)System.DateTime.Now.Ticks;
+		Debug.Log (Random.Range (0,100));
 		
 		num_col = (int)(num_row*col_stretch);
 		mesh_terrain = GameObject.Find("Terrain");
@@ -30,22 +43,47 @@ public class World7 : MonoBehaviour {
 		map = new Map(num_row, num_col);
 		map.initHexes();
 		map.generateHeightMap();
-
+		
 		map.createHexBoard();
+		//map.setWaterHeight();
+		map.generateMoistureMap();
+
 		map.setHexType();
 
 		createMesh();
 		buildMesh();
 
+		cities = new GameObject[5];
+		for(int i = 0 ; i < 5; i++){
+			cities[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			cities[i].transform.position = new Vector3(-1000,-1000,0);
+		}
+		
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 		meshc.sharedMesh = mesh; // Give it your mesh here.
-		//sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		//sphere1.collider.enabled = false;
+		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		sphere1.collider.enabled = false;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		RaycastHit hit;
+		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
+		if(Physics.Raycast(ray2, out hit, 10000f)){
+			if(hit.collider.gameObject.CompareTag("Terrain")){
+				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
+				//ret.printHex();
+				//Debug.Log("avg_height: " + ret.getHexAverageElevation());
+				sphere1.transform.position = ret.center;
+				showTile = true;
+				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
+			}else{
+				showTile = false;
+			}
+		}
 	
 	}
 
@@ -261,14 +299,22 @@ public class World7 : MonoBehaviour {
 			UnityEngine.Random.Range(0.0f,1.0f));*/
 		Color color = new Color();
 
-		if(map.terrain[x,y].type == "land"){
-			color = Color.green;
-		}else if(map.terrain[x,y].type == "water"){
+		if (map.terrain [x, y].type == "water") {
 			color = Color.cyan;
+		} else if (map.terrain [x, y].type == "sand") {
+			color = Color.yellow;
+		}else if (map.terrain [x, y].type == "grass") {
+			color = Color.green;
+		}else if (map.terrain [x, y].type == "rock") {
+			color = Color.gray;
+		}else if (map.terrain [x, y].type == "snow") {
+			color = Color.white;
+		} else {
+			color = Color.magenta;
 		}
 
 		for(int i=0; i < count; i++){
-			newColor.Add(color);
+			newColor.Add(ColorGenerator.getColorFromString (map.terrain[x,y].type));
 		}
 	}
 
@@ -298,6 +344,38 @@ public class World7 : MonoBehaviour {
 
 	}
 
+	Hex getMouseHex(Vector3 world){
+		for(int i=0; i < num_row; i++){
+			for(int j=0; j < num_col; j++){
+				if(map.terrain[i,j].inBoundingBox(world)){
+					return map.terrain[i,j];
+				}
+			}
+		}
+		return null;
+	}
 
-// End of Class
+	void OnGUI(){
+		if(showTile){
+			GUI.Box(new Rect(10, 10, 130, 90), tileInfo);
+		}
+		if(GUI.Button(new Rect(10,110,130,30), "Add Start Locations")) {
+			GameObject[] new_cities = GameStart.addStartLocation(map.terrain, num_row, num_col, cities);
+			for(int i = 0; i < cities.Length; i++){
+				cities[i].transform.position = new_cities[i].transform.position;
+			}
+		}
+		
+	}
+
+	private static string getTileInfo(Hex[,] terrain, int i, int j){
+		return terrain [i, j].getTileInfo (); 
+	}
+
+
+
+
+	
+	
+	// End of Class
 }

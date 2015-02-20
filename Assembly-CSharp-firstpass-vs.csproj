@@ -50,6 +50,8 @@
      <Compile Include="Assets\Plugins\Perlin.cs" />
      <None Include="Assets\Shader2.shader" />
      <None Include="Assets\Vertex Colored.shader" />
+     <None Include="Assets\Crossfade.shader" />
+     <None Include="Assets\Vertex2.shader" />
      <None Include="Assets\SimpleShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
