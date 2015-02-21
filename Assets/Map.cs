@@ -93,9 +93,9 @@ public class Map {
 				Vector2 perlin1 = zoom_array[0] * (new Vector2(i,j)) + shift;
 				Vector2 perlin2 = (zoom_array[1] * (new Vector2(i,j)) + shift);
 				Vector2 perlin3 = (zoom_array[2] * (new Vector2(i,j)));
-				array[i,j] = (double)(Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*blend_array[0] +
+				array[i,j] = (double)((Mathf.PerlinNoise(perlin1.x, perlin1.y)*max_height*blend_array[0] +
 				                           Mathf.PerlinNoise(perlin2.x, perlin2.y)*max_height*blend_array[1] +
-				                           Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*blend_array[2]);
+				                           Mathf.PerlinNoise(perlin3.x, perlin3.y)*max_height*blend_array[2] ));
 
 				if(array[i,j] < min){
 					min = array[i,j];
@@ -248,16 +248,6 @@ public class Map {
 		}
 	}
 
-	// Returns the depth over a hex
-	public int getDepth(int x, int y, int x_o, int y_o, int vertex){
-
-		//print ("x: " + x + " " + y + " center at: " + ((2 * x + 1) * 2 + x_o) + " and " + (6 * (y / 2) + 2 + y_o));
-		int x_hex = ((2 * x + 1) * 2 + x_o);
-		int y_hex = (6 * (y / 2) + 2 + y_o);
-
-		return ((-((int)height_map[x_hex,y_hex-2])) + (-((int)height_map[x_hex-2,y_hex-1])) + (-((int)height_map[x_hex+2,y_hex-1])) + (-((int)height_map[x_hex,y_hex])) + (-((int)height_map[x_hex-2,y_hex+1])) + (-((int)height_map[x_hex+2,y_hex+1])) + (-((int)height_map[x_hex,y_hex+2])) / 7);
-	}
-
 	public void setWaterHeight(){
 		Debug.Log("set water height");
 		double local_max = -1.0;
@@ -313,32 +303,40 @@ public class Map {
 		//this.terrain = terrain;
 	}
 
+		// Returns the depth over a hex
+	public int getDepth(int i, int j){
+
+		int depth = 0;
+
+		//	if(i!=0 && j != 0 && i <= num_row-1 && j <= num_col -1){
+
+		int x = i;
+		int y = j;
+
+		int x_off = 0;
+		int y_off = 0;
+
+		if (j%2==0) {
+				y--;
+				x_off = 2;
+				y_off = 3;
+		}
+
+		int x_hex = ((2 * x + 1) * 2 + x_off);
+		int y_hex = (6 * (y / 2) + 2 + y_off);
+
+		//Debug.Log("x,y,depth,water_height: " + " " + x_hex + " " + y_hex + " " + depth + " " + water_height);
+		return ((-((int)depth_map[x_hex,y_hex-2])) + (-((int)depth_map[x_hex-2,y_hex-1])) + (-((int)depth_map[x_hex+2,y_hex-1])) + (-((int)depth_map[x_hex,y_hex])) + (-((int)depth_map[x_hex-2,y_hex+1])) + (-((int)depth_map[x_hex+2,y_hex+1])) + (-((int)depth_map[x_hex,y_hex+2])) / 7);
+		
+
+		}
+
 	public void setHexType(){
 
 		for(int i=0; i < num_row; i++){
 			for(int j=0; j < num_col; j++){
 
-				int depth = 0;
-
-			//	if(i!=0 && j != 0 && i <= num_row-1 && j <= num_col -1){
-
-				int x = i;
-				int y = j;
-
-				int x_off = 0;
-				int y_off = 0;
-
-				if (j%2==0) {
-						y--;
-						x_off = 2;
-						y_off = 3;
-				}
-
-				int x_hex = ((2 * x + 1) * 2 + x_off);
-				int y_hex = (6 * (y / 2) + 2 + y_off);
-				//Debug.Log("x,y,depth: " + " " + x_hex + " " + y_hex + " " + depth);
-				depth =  ((-((int)depth_map[x_hex,y_hex-2])) + (-((int)depth_map[x_hex-2,y_hex-1])) + (-((int)depth_map[x_hex+2,y_hex-1])) + (-((int)depth_map[x_hex,y_hex])) + (-((int)depth_map[x_hex-2,y_hex+1])) + (-((int)depth_map[x_hex+2,y_hex+1])) + (-((int)depth_map[x_hex,y_hex+2])) / 7);
-				Debug.Log("x,y,depth,water_height: " + " " + x_hex + " " + y_hex + " " + depth + " " + water_height);
+				
 
 				// }else{
 				// 	depth = (int)inc;
@@ -346,15 +344,24 @@ public class Map {
 				//Debug.Log(ret + " " + terrain[i,j].getHexAverageElevation());
 
 				// if(i==0 || i == num_row-1 || j==0 || j == num_col-1){
-				// 	terrain[i,j].type = "water";
+				// 	terrain[i,j].type = "deep_water";
 				// 	continue;
 				// }
 
 				if(terrain[i,j].getHexAverageElevation() <= 0.0){
-					if(depth > 10){
+					if(getDepth(i,j) > 10){
 						terrain[i,j].type = "deep_water";
 					}else{
 						terrain[i,j].type = "shallow_water";
+					}
+
+					if(i==0 || i == num_row-1 || j==0 || j == num_col-1){
+						//terrain[i,j].type = "deep_water";
+						continue;
+					}
+
+					if(neighborHexTypes(i,j,"sand") > 1 && Random.Range(0,100) > 50 &&  i>1 && j>1 && i<=num_row-1 && j <= num_col-1){
+						terrain[i,j].type = "sand";
 					}
 					//terrain[i,j].type = "water";
 				}else if(terrain[i,j].getHexAverageElevation() <= effective_max_height * 0.1){
@@ -371,7 +378,7 @@ public class Map {
 				}
 
 				//TODO make sure this only happens once, no moisture map just set rainfall directly
-				//terrain[i,j].rainfall = moisture_map[i,j];
+				terrain[i,j].rainfall = moisture_map[i,j];
 			}
 		}
 
@@ -379,23 +386,24 @@ public class Map {
 			for(int j=0; j < num_col; j++){
 				//Change from Water to Deep Water and Shallow Water
 				if(i != 0 && j != 0 && i != num_row-1 && j != num_col-1){
-					if(terrain[i,j].type == "water" && (neighborHexTypes(i,j,"sand") > 0)){
-						//terrain[i,j].type = "shallow_water";
-						continue;
-					}else if (terrain[i,j].type == "water"){
-						//terrain[i,j].type = "deep_water";
-						if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
-							//terrain[i,j].type = "shallow_water";
-						}
-						// else if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
-						// 	terrain[i,j].type = "shallow_water";
-						// }
-						continue;
-					}
+					// if(terrain[i,j].type == "water" && (neighborHexTypes(i,j,"sand") > 0)){
+					// 	//terrain[i,j].type = "shallow_water";
+					// 	continue;
+					// }
+					// else if (terrain[i,j].type == "water"){
+					// 	//terrain[i,j].type = "deep_water";
+					// 	if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
+					// 		//terrain[i,j].type = "shallow_water";
+					// 	}
+					// 	// else if(neighborHexTypes(i,j,"shallow_water") > 0 && Random.Range(0,100) > 75){
+					// 	// 	terrain[i,j].type = "shallow_water";
+					// 	// }
+					// 	continue;
+					// }
 
 				// continue line should have stopped us from reaching this point as a water tile
 				// this point forward all tiles are land
-
+					//Debug.Log(terrain[i,j].rainfall);
 					if(terrain[i,j].rainfall <= max * 0.43){
 						if(terrain[i,j].type == "grass")
 							terrain[i,j].type = "desert";
@@ -412,7 +420,7 @@ public class Map {
 					}else if(terrain[i,j].rainfall <= max * 0.6){
 						if(terrain[i,j].type == "sand" && Random.Range(0,100) > 75){
 							terrain[i,j].type = "marsh";
-						}else if(terrain[i,j].type == "grass" && Random.Range(0,100)  > 33){
+						}else if(terrain[i,j].type == "grass"){
 							terrain[i,j].type = "jungle";
 						}
 					}
@@ -496,6 +504,8 @@ public class Map {
 	}
 
 	public int neighborHexTypes(int i, int j, string type){
+		string s = terrain[0,0].type;
+		//Debug.Log(i + " " + j);
 		int count = 0;
 		if(terrain[i+1,j].type == type)
 			count++;

@@ -9,6 +9,9 @@ public class World7 : MonoBehaviour {
 	private Mesh mesh;
 	private GameObject mesh_terrain;
 	public static int num_row = 63; //75, 63
+	public static int c_lengthx = 63*4;
+	public static int c_lengthy = 63*3 + 1;
+	public static int c_lengthz = 0;
 	private static float col_stretch = 2.3f; //1.618, 2.3
 	public static int num_col = 0;
 	private static int x_off = 0;
@@ -45,7 +48,7 @@ public class World7 : MonoBehaviour {
 		map.generateHeightMap();
 		
 		map.createHexBoard();
-		//map.setWaterHeight();
+		
 		map.generateMoistureMap();
 
 		map.setHexType();
@@ -63,6 +66,12 @@ public class World7 : MonoBehaviour {
 		meshc.sharedMesh = mesh; // Give it your mesh here.
 		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		sphere1.collider.enabled = false;
+
+		GameObject ocean = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		ocean.transform.position = new Vector3(128f,20.1f,217f);
+		ocean.transform.localScale = new Vector3(256f,40f,440f);
+		ocean.renderer.material.color = ColorGenerator.getColorFromString("deep_water");
+
 
 	}
 	
@@ -101,20 +110,8 @@ public class World7 : MonoBehaviour {
 
 	public static void addHexToMesh(int y, int x, bool odd){
 
-		x_off = 0;
-		y_off = 0;
-
 		int hy = y;
 		int hx = x;
-
-		cur_x = hx;
-		cur_y = hy;
-
-		if (odd) {
-				y--;
-				x_off = 2;
-				y_off = 3;
-		}
 		
 		if (hy == 0 && hx == 0) {
 
