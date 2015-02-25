@@ -62,6 +62,7 @@
      <Compile Include="Assets\Sources\~ControlScripts\KeyboardOrbit.js" />
      <Compile Include="Assets\Sources\~ControlScripts\VPS.js" />
      <None Include="Assets\Shader2.shader" />
+     <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Vertex Colored.shader" />
      <None Include="Assets\Crossfade.shader" />
      <None Include="Assets\Vertex2.shader" />
