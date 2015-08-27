@@ -12,8 +12,8 @@ using System.Collections;
 public class Map {
 
 	public Hex[,] terrain;
-	private int num_row = 10;
-	private int num_col = 10;
+	public int num_row = 10;
+	public int num_col = 10;
 	private int x_off = 1;
 	private int y_off = 1;
 	private Vector2 shift = new Vector2(Random.Range (0.0f,1.0f),Random.Range (0.0f,1.0f));

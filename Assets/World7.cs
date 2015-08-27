@@ -56,21 +56,21 @@ public class World7 : MonoBehaviour {
 		createMesh();
 		buildMesh();
 
-		cities = new GameObject[5];
-		for(int i = 0 ; i < 5; i++){
-			cities[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cities[i].transform.position = new Vector3(-1000,-1000,0);
-		}
+		// cities = new GameObject[5];
+		// for(int i = 0 ; i < 5; i++){
+		// 	cities[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		// 	cities[i].transform.position = new Vector3(-1000,-1000,0);
+		// }
 		
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 		meshc.sharedMesh = mesh; // Give it your mesh here.
 		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		sphere1.collider.enabled = false;
+		sphere1.GetComponent<Collider>().enabled = false;
 
 		GameObject ocean = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		ocean.transform.position = new Vector3(128f,20.1f,217f);
 		ocean.transform.localScale = new Vector3(256f,40f,440f);
-		ocean.renderer.material.color = ColorGenerator.getColorFromString("deep_water");
+		ocean.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString("deep_water");
 
 
 	}
@@ -84,9 +84,6 @@ public class World7 : MonoBehaviour {
 		if(Physics.Raycast(ray2, out hit, 10000f)){
 			if(hit.collider.gameObject.CompareTag("Terrain")){
 				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
-				//ret.printHex();
-				//Debug.Log("avg_height: " + ret.getHexAverageElevation());
-				sphere1.transform.position = ret.center;
 				showTile = true;
 				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
 			}else{
@@ -356,13 +353,6 @@ public class World7 : MonoBehaviour {
 		if(showTile){
 			GUI.Box(new Rect(10, 10, 130, 90), tileInfo);
 		}
-		if(GUI.Button(new Rect(10,110,130,30), "Add Start Locations")) {
-			GameObject[] new_cities = GameStart.addStartLocation(map.terrain, num_row, num_col, cities);
-			for(int i = 0; i < cities.Length; i++){
-				cities[i].transform.position = new_cities[i].transform.position;
-			}
-		}
-		
 	}
 
 	private static string getTileInfo(Hex[,] terrain, int i, int j){

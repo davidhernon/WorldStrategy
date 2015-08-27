@@ -16,12 +16,15 @@ public class Hex {
 	public bool coast = false;
 	public string[] lowestNeighbor = new string[7];
 	public bool city = false;
+	public bool unit = false;
 	public float defense = 0f;
 	public float industry = 0f;
 	public float food = 0f;
 	public double avg_height = 0.0;
 	public double rainfall = 0.0;
 	public double orig_height = 0.0;
+
+	public Unit unit = null;
 
 		public Hex(){
 			if(UnityEngine.Random.Range(0,100) > 50)
@@ -205,7 +208,22 @@ public class Hex {
 		public string getTileInfo(){
 			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y);
 		}
+
+	public void setUnit(Unit n)
+	{
+		this.unit = n;
+	}
 		
+	public bool hasUnit()
+	{
+		if (this.unit == null) {
+			Debug.Log ("true");
+			return false;
+		} else {
+			Debug.Log ("FALSE");
+			return true;
+		}
+	}
 
 	}
 
