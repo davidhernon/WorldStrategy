@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\ColorGenerator.cs" />
+     <Compile Include="Assets\GameEngine.cs" />
      <Compile Include="Assets\GameStart.cs" />
      <Compile Include="Assets\Hex.cs" />
      <Compile Include="Assets\HexBoard.cs" />

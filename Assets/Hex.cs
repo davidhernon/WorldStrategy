@@ -23,6 +23,8 @@ public class Hex {
 	public double rainfall = 0.0;
 	public double orig_height = 0.0;
 
+	public Unit unit = null;
+
 		public Hex(){
 			if(UnityEngine.Random.Range(0,100) > 50)
 				type = "water";
@@ -205,7 +207,19 @@ public class Hex {
 		public string getTileInfo(){
 			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y);
 		}
+
+	public void setUnit(Unit n)
+	{
+		this.unit = n;
+	}
 		
+	public bool hasUnit()
+	{
+		if (this.unit == null)
+			return false;
+		else
+			return true;
+	}
 
 	}
 
