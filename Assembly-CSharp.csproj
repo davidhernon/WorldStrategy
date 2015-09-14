@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\AI.cs" />
+     <Compile Include="Assets\Animal.cs" />
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\ColorGenerator.cs" />
      <Compile Include="Assets\GameEngine.cs" />
@@ -56,6 +57,7 @@
      <Compile Include="Assets\Human.cs" />
      <Compile Include="Assets\Map.cs" />
      <Compile Include="Assets\Messenger.cs" />
+     <Compile Include="Assets\Nature.cs" />
      <Compile Include="Assets\Noise.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\SimplexnoiseGenerator.cs" />

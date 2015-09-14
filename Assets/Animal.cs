@@ -9,77 +9,73 @@
 // ------------------------------------------------------------------------------
 using System;
 using UnityEngine;
-
-	public class Unit 
+namespace AssemblyCSharp
+{
+	public class Animal : Unit
 	{
-		public int hex_coordinates_x;
-		public int hex_coordinates_y;
-		public Vector3 vector;
-		public Hex on_hex;
 
-		public GameObject unit_marker;
-
-		public Unit ()
+		public Animal ()
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = new Vector3(-1000,-1000,0);
 			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("unit_marker_basic");
 			
 		}
-
-		public Unit (Vector3 vector)
+		
+		public Animal (Vector3 vector)
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = vector;
 			this.vector = vector;
-			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("unit_marker_basic");
-
+			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("grass");
+			
 			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, 	new Vector3(vector.x, vector.y + 1.0f, vector.z), GameEngine.num_row, GameEngine.num_col);
-		Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
+			Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
 			this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
 			this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
 			this.vector = vector;
-
+			
 			GameEngine.map.terrain [hex_coordinates_x, hex_coordinates_y].setUnit (this);
-
+			
 			this.on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
 //			this.unit_marker.GetComponent<Collider> () = null;
 			GameUtils.destroyCollider (this.unit_marker);
+
+		}
+		
+		public void move(Vector3 vector)
+		{
+			GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].unit = null;
+			this.unit_marker.transform.position = vector;
+			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, vector, GameEngine.num_row, GameEngine.num_col);
+			Debug.Log ("hex coords received" + hex_coordinates);
+			this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
+			this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
+			GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].setUnit (this);
+			
+			
+		}
+		
+		public void move(Vector3 vector, Hex hex)
+		{
+			on_hex.unit = null;
+			unit_marker.transform.position = vector;
+			this.on_hex = hex;
+			hex.unit = this;
+		}
+		
+		public void move(Hex hex){
+			this.unit_marker.transform.position = hex.center;
+			this.on_hex.unit = null;
+			this.on_hex = hex;
+			hex.unit = this;
+		}
+		
+		public string toString()
+		{
+			return "Animal on: " + this.hex_coordinates_x + " " + this.hex_coordinates_y + " with vector: " + this.vector;
 		}
 
-		public void move(Vector3 vector)
-	{
-		GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].unit = null;
-		this.unit_marker.transform.position = vector;
-		Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, vector, GameEngine.num_row, GameEngine.num_col);
-		Debug.Log ("hex coords received" + hex_coordinates);
-		this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
-		this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
-		GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].setUnit (this);
-
-
 	}
-
-	public void move(Vector3 vector, Hex hex)
-	{
-		on_hex.unit = null;
-		unit_marker.transform.position = vector;
-		this.on_hex = hex;
-		hex.unit = this;
-	}
-
-	public void move(Hex hex){
-		this.unit_marker.transform.position = hex.center;
-		this.on_hex.unit = null;
-		this.on_hex = hex;
-		hex.unit = this;
-	}
-
-	public string toString()
-	{
-		return "Unit on: " + this.hex_coordinates_x + " " + this.hex_coordinates_y + " with vector: " + this.vector;
-	}
-
 }
-
 

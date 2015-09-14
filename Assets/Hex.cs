@@ -201,7 +201,6 @@ public class Hex {
 		}
 
 		public double getHexAverageElevation(){
-			//Debug.Log ((vertices[0].z + vertices[1].z + vertices[2].z + vertices[3].z + vertices[4].z + vertices[5].z + vertices[6].z)/7f);
 			return this.avg_height;
 		}
 

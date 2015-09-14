@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-public class GameUtils
+public class GameUtils : MonoBehaviour
 {
 
 	public static Vector2 getRandomStartLocation(Hex[,] map, int rows, int cols)
@@ -38,5 +38,9 @@ public class GameUtils
 			}
 		}
 		return new Vector2();
+	}
+
+	public static void destroyCollider (GameObject gameObject) {
+		Destroy (gameObject.GetComponent<Collider> ());
 	}
 }
