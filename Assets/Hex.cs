@@ -16,7 +16,7 @@ public class Hex {
 	public bool coast = false;
 	public string[] lowestNeighbor = new string[7];
 	public bool city = false;
-	public bool unit = false;
+//	public bool hasUnit = false;
 	public float defense = 0f;
 	public float industry = 0f;
 	public float food = 0f;
@@ -206,21 +206,20 @@ public class Hex {
 		}
 
 		public string getTileInfo(){
-			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y);
+			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y + "\nHas Unit: " + this.hasUnit());
 		}
 
 	public void setUnit(Unit n)
 	{
+		this.unit = new Unit ();
 		this.unit = n;
 	}
 		
 	public bool hasUnit()
 	{
 		if (this.unit == null) {
-			Debug.Log ("true");
 			return false;
 		} else {
-			Debug.Log ("FALSE");
 			return true;
 		}
 	}

@@ -10,7 +10,7 @@
 using System;
 using UnityEngine;
 
-	public class Unit
+	public class Unit 
 	{
 		int hex_coordinates_x;
 		int hex_coordinates_y;
@@ -18,11 +18,13 @@ using UnityEngine;
 		Hex on_hex;
 
 		public GameObject unit_marker;
+
 		public Unit ()
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = new Vector3(-1000,-1000,0);
 			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("unit_marker_basic");
+			
 		}
 
 		public Unit (Vector3 vector)
@@ -33,16 +35,17 @@ using UnityEngine;
 			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("unit_marker_basic");
 
 			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, 	new Vector3(vector.x, vector.y + 1.0f, vector.z), GameEngine.num_row, GameEngine.num_col);
+		Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
+			Debug.Log ("creating hex unit at: " + hexAtPoint);
 			this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
 			this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
 			Debug.Log ("created unit at: "+this.hex_coordinates_x + " " + this.hex_coordinates_y);
 			this.vector = vector;
 
-
 			GameEngine.map.terrain [hex_coordinates_x, hex_coordinates_y].setUnit (this);
 
-			on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
-
+			this.on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
+//			Destroy (this.unit_marker.GetComponent<Collider>());
 		}
 
 		public void move(Vector3 vector)
@@ -64,13 +67,18 @@ using UnityEngine;
 		unit_marker.transform.position = vector;
 		this.on_hex = hex;
 		hex.unit = this;
+	}
 
-
+	public void move(Hex hex){
+		this.unit_marker.transform.position = hex.center;
+		this.on_hex.unit = null;
+		this.on_hex = hex;
+		hex.unit = this;
 	}
 
 	public string toString()
 	{
-		return "Unit: " + this.hex_coordinates_x + " " + this.hex_coordinates_y + " with vector: " + this.vector;
+		return "Unit on: " + this.hex_coordinates_x + " " + this.hex_coordinates_y + " with vector: " + this.vector;
 	}
 
 }

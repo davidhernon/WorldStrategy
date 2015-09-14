@@ -7,7 +7,7 @@ public class GameEngine : MonoBehaviour {
 	public static int num_row;
 	public static int num_col;
 
-	public GameObject smoke;
+	public static bool show_tile;
 
 	Player[] players = new Player[1];
 	int player = 0;
@@ -18,7 +18,6 @@ public class GameEngine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		players[0] = new Human("Player One");
 //		players[1] = new AI("Player Two");
 
@@ -34,39 +33,38 @@ public class GameEngine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetMouseButtonDown (1)) {
-			RaycastHit hit;
-			Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
-			Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-			if(Physics.Raycast(ray2, out hit, 10000f)){
-				if(hit.collider.gameObject.CompareTag("Terrain")){
-					Hex ret = GameUtils.getHexFromPoint(new Vector3(hit.point.x,hit.point.z,0), map, num_row, num_col);
-					if(selected_hex.unit != null)
-					{
-						Debug.Log ("was not null");
-						Unit unit = selected_hex.unit;
-											Debug.Log ("Printing from Right Click Before If: " + unit.toString());
-											unit.move (ret.center, ret);
-											Debug.Log ("Printing from Right Click After If: " + unit.toString());
-											selected_hex.unit = null;
-											selected_hex = ret;
-
-					}else{
-						Debug.Log ("was null");
-						selected_hex = ret;
-					}
-
-
-					//grab new hex
-					//grab old hex
-					//move unit from hex 1 to hex 2
-					// remove references to old hex
-					//set new hex to old
-
-				}else{
-				}
-			}
-		}
+//		if (Input.GetMouseButtonDown (1)) {
+//			RaycastHit hit;
+//			Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+////			Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
+//			if(Physics.Raycast(ray2, out hit, 10000f)){
+//				if(hit.collider.gameObject.CompareTag("Terrain")){
+//
+//					Hex right_clicked_hex = GameUtils.getHexFromPoint(new Vector3(hit.point.x,hit.point.z,0), map, num_row, num_col);
+////					Debug.Log (selected_hex.getTileInfo());
+////					if(selected_hex.hasUnit())
+////					{
+////						Debug.Log ("log");
+////
+////						selected_hex.unit.move (right_clicked_hex);
+////						selected_hex = null;
+////						selected_hex = right_clicked_hex;
+////
+////					}else{
+////
+////					}
+//
+//
+//					//grab new hex
+//					//grab old hex
+//					//move unit from hex 1 to hex 2
+//					// remove references to old hex
+//					//set new hex to old
+//
+//				}else{
+//				}
+//			}
+//		}
 	
 	}
 
@@ -75,20 +73,30 @@ public class GameEngine : MonoBehaviour {
 		RaycastHit hit;
 		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
 		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-		if(Physics.Raycast(ray2, out hit, 10000f)){
-			if(hit.collider.gameObject.CompareTag("Terrain")){
-				selected_hex = null;
-				//if(selected_hex != null){Debug.Log ("Printing from Left Click before: " + selected_hex.unit.toString()); };
-				selected_hex = GameUtils.getHexFromPoint(new Vector3(hit.point.x,hit.point.z,0), map, num_row, num_col);
-				selected_cell_marker.transform.position = selected_hex.center;
-//				selected_hex = ret;
-				//GameObject newSmoke = (GameObject)Instantiate (smoke, ret.center, Quaternion.identity);
-				//Debug.Log ("Printing from Left Click after: " + selected_hex.unit.toString()); 
-			}else{
+		if (Physics.Raycast (ray2, out hit, 10000f)) {
+			if (hit.collider.gameObject.CompareTag ("Terrain")) {
+//				selected_hex = null;
+				selected_hex = GameUtils.getHexFromPoint (new Vector3 (hit.point.x, hit.point.z, 0), map, num_row, num_col);
+//				selected_cell_marker.transform.position = selected_hex.center;
+				show_tile = true;
+			} else {
+				//clicked but didnt connect with terrain
 			}
+		} else {
 		}
 
-
+		//		RaycastHit hit;
+		//		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+		//		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
+		//		if(Physics.Raycast(ray2, out hit, 10000f)){
+		//			if(hit.collider.gameObject.CompareTag("Terrain")){
+		//				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
+		//				showTile = true;
+		//				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
+		//			}else{
+		//				showTile = false;
+		//			}
+		//		}
 
 	}
 
@@ -101,6 +109,10 @@ public class GameEngine : MonoBehaviour {
 		if(GUI.Button(new Rect(10,110,130,30), "Spawn Unit")) {
 			Vector2 loc = selected_hex.pos;
 			players[player].setupUnits(map, loc);
+		}
+
+		if (show_tile) {
+			GUI.Box(new Rect(10, 10, 130, 90), selected_hex.getTileInfo());
 		}
 
 	}

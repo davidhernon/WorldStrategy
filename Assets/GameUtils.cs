@@ -19,6 +19,7 @@ public class GameUtils
 	}
 
 	public static Hex getHexFromPoint(Vector3 world, Map map, int num_row, int num_col){
+		Debug.Log ("printing world: " + num_col);
 		for(int i=0; i < num_row; i++){
 			for(int j=0; j < num_col; j++){
 				if(map.terrain[i,j].inBoundingBox(world)){

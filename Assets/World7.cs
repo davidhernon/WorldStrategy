@@ -78,18 +78,18 @@ public class World7 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		RaycastHit hit;
-		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
-		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-		if(Physics.Raycast(ray2, out hit, 10000f)){
-			if(hit.collider.gameObject.CompareTag("Terrain")){
-				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
-				showTile = true;
-				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
-			}else{
-				showTile = false;
-			}
-		}
+//		RaycastHit hit;
+//		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+//		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
+//		if(Physics.Raycast(ray2, out hit, 10000f)){
+//			if(hit.collider.gameObject.CompareTag("Terrain")){
+//				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
+//				showTile = true;
+//				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
+//			}else{
+//				showTile = false;
+//			}
+//		}
 	
 	}
 
@@ -338,26 +338,26 @@ public class World7 : MonoBehaviour {
 
 	}
 
-	Hex getMouseHex(Vector3 world){
-		for(int i=0; i < num_row; i++){
-			for(int j=0; j < num_col; j++){
-				if(map.terrain[i,j].inBoundingBox(world)){
-					return map.terrain[i,j];
-				}
-			}
-		}
-		return null;
-	}
+//	Hex getMouseHex(Vector3 world){
+//		for(int i=0; i < num_row; i++){
+//			for(int j=0; j < num_col; j++){
+//				if(map.terrain[i,j].inBoundingBox(world)){
+//					return map.terrain[i,j];
+//				}
+//			}
+//		}
+//		return null;
+//	}
 
 	void OnGUI(){
-		if(showTile){
-			GUI.Box(new Rect(10, 10, 130, 90), tileInfo);
-		}
+//		if(showTile){
+//			GUI.Box(new Rect(10, 10, 130, 90), tileInfo);
+//		}
 	}
 
-	private static string getTileInfo(Hex[,] terrain, int i, int j){
-		return terrain [i, j].getTileInfo (); 
-	}
+//	private static string getTileInfo(Hex[,] terrain, int i, int j){
+//		return terrain [i, j].getTileInfo (); 
+//	}
 
 
 
