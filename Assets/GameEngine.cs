@@ -33,38 +33,25 @@ public class GameEngine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-//		if (Input.GetMouseButtonDown (1)) {
-//			RaycastHit hit;
-//			Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
-////			Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-//			if(Physics.Raycast(ray2, out hit, 10000f)){
-//				if(hit.collider.gameObject.CompareTag("Terrain")){
+		if (Input.GetMouseButtonDown (1)) {
+			RaycastHit hit;
+			Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
+			if(Physics.Raycast(ray2, out hit, 10000f)){
+				if(hit.collider.gameObject.CompareTag("Terrain")){
+					Hex right_clicked_hex = GameUtils.getHexFromPoint(new Vector3(hit.point.x,hit.point.z,0), map, num_row, num_col);
+					if(selected_hex.hasUnit())
+					{
+						selected_hex.unit.move (right_clicked_hex);
+						selected_hex = null;
+						selected_hex = right_clicked_hex;
+					}else{
 //
-//					Hex right_clicked_hex = GameUtils.getHexFromPoint(new Vector3(hit.point.x,hit.point.z,0), map, num_row, num_col);
-////					Debug.Log (selected_hex.getTileInfo());
-////					if(selected_hex.hasUnit())
-////					{
-////						Debug.Log ("log");
-////
-////						selected_hex.unit.move (right_clicked_hex);
-////						selected_hex = null;
-////						selected_hex = right_clicked_hex;
-////
-////					}else{
-////
-////					}
-//
-//
-//					//grab new hex
-//					//grab old hex
-//					//move unit from hex 1 to hex 2
-//					// remove references to old hex
-//					//set new hex to old
-//
-//				}else{
-//				}
-//			}
-//		}
+					}
+
+				}else{
+				}
+			}
+		}
 	
 	}
 
@@ -85,24 +72,11 @@ public class GameEngine : MonoBehaviour {
 		} else {
 		}
 
-		//		RaycastHit hit;
-		//		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
-		//		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-		//		if(Physics.Raycast(ray2, out hit, 10000f)){
-		//			if(hit.collider.gameObject.CompareTag("Terrain")){
-		//				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
-		//				showTile = true;
-		//				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
-		//			}else{
-		//				showTile = false;
-		//			}
-		//		}
-
 	}
 
 	void OnGUI(){
 		
-		if (GUI.Button (new Rect (0, Screen.height - 40, 130, 30), "End Turn")) {
+		if (GUI.Button (new Rect (Screen.width - 130, Screen.height - 40, 130, 30), "End Turn")) {
 			players[player].endPlayersTurn();
 			player = (player+1)%(players.Length);
 		}
