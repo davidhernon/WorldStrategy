@@ -63,8 +63,8 @@ public class World7 : MonoBehaviour {
 		
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 		meshc.sharedMesh = mesh; // Give it your mesh here.
-		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		sphere1.GetComponent<Collider>().enabled = false;
+//		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+//		sphere1.GetComponent<Collider>().enabled = false;
 
 		GameObject ocean = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		ocean.transform.position = new Vector3(128f,20.1f,217f);

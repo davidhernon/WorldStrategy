@@ -12,7 +12,6 @@ using UnityEngine;
 
 	public class Animal : Unit
 	{
-		public string name = "naming things";
 		public Animal ()
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -23,7 +22,6 @@ using UnityEngine;
 		
 		public Animal (Vector3 vector)
 		{
-			this.name = "naimg";
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = vector;
 			this.vector = vector;
@@ -38,7 +36,7 @@ using UnityEngine;
 			GameEngine.map.terrain [hex_coordinates_x, hex_coordinates_y].setUnit (this);
 			
 			this.on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
-//			GameUtils.destroyCollider (this.unit_marker);
+			GameUtils.destroyCollider (this.unit_marker);
 
 		}
 		
@@ -47,7 +45,6 @@ using UnityEngine;
 			GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].unit = null;
 			this.unit_marker.transform.position = vector;
 			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, vector, GameEngine.num_row, GameEngine.num_col);
-			Debug.Log ("hex coords received" + hex_coordinates);
 			this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
 			this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
 			GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y].setUnit (this);
@@ -64,7 +61,6 @@ using UnityEngine;
 		}
 		
 		public void move(Hex hex){
-			Debug.Log("on hex: " + on_hex.pos + " moving to hex: " + hex.pos);
 			this.unit_marker.transform.position = hex.center;
 			this.on_hex.unit = null;
 			this.on_hex = hex;

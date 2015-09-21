@@ -15,34 +15,19 @@ public class Nature : Player
 {
 	private int total_units;
 	public static List<Animal> animals  = new List<Animal>();
+//	public static List<
 
 
 	public Nature (string name) : base(name)
 	{
 	}
-
-//	override public void setupUnits(Map map, Vector2 vector)
-//	{
-//		this.units = new Unit[1];
-//		Unit new_unit = new Unit (map.terrain[(int)vector.x, (int)vector.y].center);
-//		this.units [0] = new_unit;
-//		map.terrain[(int)vector.x, (int)vector.y].setUnit((Unit)this.units [0]);
-//	}
+	
 
 	override public void move()
 	{
-		Debug.Log ("inside move");
-//		setupUnits (GameEngine.map);
 		foreach (Animal ani in animals) {
 			ani.move();
 		}
-//				if(animals[i]!=null){
-//					Debug.Log ("units at i are not null");
-//				}
-//				Debug.Log ("units at i are null");
-//				animals.IndexOf(i).move();
-//				animals.FindIndex(i).move();
-//				units[i].move (GameEngine.map.terrain[6,15]);
 	}
 
 	override public void setupUnits(Map map, Vector2 vector)
@@ -53,7 +38,6 @@ public class Nature : Player
 	override public void setupUnits(Map map){
 		total_units = (int)( GameEngine.num_col * GameEngine.num_row * 0.15);
 		for (int i=0; i< total_units; i++) {
-			//get random hex.ps
 			Hex temp = map.terrain[Random.Range (0,GameEngine.num_row), Random.Range (0, GameEngine.num_col)];
 			if(GameUtils.isLand(temp)){
 				Vector3 position = temp.center;
@@ -61,6 +45,24 @@ public class Nature : Player
 				newAnimal.on_hex = temp;
 				animals.Add ( newAnimal );
 				temp.setUnit(newAnimal);
+			}
+		}
+		setupTrees ();
+	}
+
+	public void setupTrees(){
+		for (int k=0; k<100; k++) {
+			for (int i=0; i < GameEngine.num_row; i++) {
+				for (int j=0; j < GameEngine.num_col; j++) {
+//				GameObject tree = GameObject.Instantiate(Resources.Load("tree")) as GameObject;
+					if (GameUtils.isLand (GameEngine.map.terrain [i, j]) && Random.Range (0, 100) < 11) {
+						GameObject tree = GameObject.Instantiate (Resources.Load ("tree")) as GameObject;
+						tree.transform.position = GameEngine.map.terrain [i, j].center;
+						tree.transform.localScale = new Vector3 (0.01f, 0.01f, 0.01f);
+						tree.transform.localScale = new Vector3 (tree.transform.localScale.x, tree.transform.localScale.y * -1, tree.transform.localScale.z * -1);
+						//				tree.transform.localRotation = new Quarternion(0,0,180);
+					}
+				}
 			}
 		}
 	}
