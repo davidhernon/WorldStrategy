@@ -43,4 +43,13 @@ public class GameUtils : MonoBehaviour
 	public static void destroyCollider (GameObject gameObject) {
 		Destroy (gameObject.GetComponent<Collider> ());
 	}
+
+	public static bool isLand(Hex hex){
+		if (hex.type == "shallow_water" || hex.type == "deep_water") {
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 }

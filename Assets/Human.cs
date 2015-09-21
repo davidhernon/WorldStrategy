@@ -12,6 +12,7 @@ using UnityEngine;
 
 public class Human : Player
 {
+
 	public Human (string name) : base(name)
 	{
 
@@ -34,6 +35,9 @@ public class Human : Player
 		Unit new_unit = new Unit (map.terrain[(int)vector.x, (int)vector.y].center);
 		this.units [0] = new_unit;
 		map.terrain[(int)vector.x, (int)vector.y].setUnit((Unit)this.units [0]);
+	}
+	override public void setupUnits(Map map){
+
 	}
 
 }

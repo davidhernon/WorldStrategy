@@ -35,7 +35,7 @@ using UnityEngine;
 			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("unit_marker_basic");
 
 			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, 	new Vector3(vector.x, vector.y + 1.0f, vector.z), GameEngine.num_row, GameEngine.num_col);
-		Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
+			Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
 			this.hex_coordinates_x = Mathf.RoundToInt(hex_coordinates.x);
 			this.hex_coordinates_y = Mathf.RoundToInt(hex_coordinates.y);
 			this.vector = vector;
@@ -43,7 +43,6 @@ using UnityEngine;
 			GameEngine.map.terrain [hex_coordinates_x, hex_coordinates_y].setUnit (this);
 
 			this.on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
-//			this.unit_marker.GetComponent<Collider> () = null;
 			GameUtils.destroyCollider (this.unit_marker);
 		}
 
@@ -74,6 +73,8 @@ using UnityEngine;
 		this.on_hex = hex;
 		hex.unit = this;
 	}
+
+	public void move (){}
 
 	public string toString()
 	{

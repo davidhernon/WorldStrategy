@@ -19,6 +19,7 @@ public abstract class Player
 	public void endPlayersTurn()
 	{
 		is_players_turn = false;
+		move ();
 		Debug.Log (this.playerName + " Turn was Ended");
 	}
 
@@ -30,4 +31,5 @@ public abstract class Player
 	
 	public abstract void move();
 	public abstract void setupUnits(Map map, Vector2 vector);
+	public abstract void setupUnits(Map map);
 }

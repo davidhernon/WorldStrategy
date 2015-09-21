@@ -37,8 +37,7 @@ public class World7 : MonoBehaviour {
 	void Start () {
 
 		UnityEngine.Random.seed = (int)System.DateTime.Now.Ticks;
-		Debug.Log (Random.Range (0,100));
-		
+
 		num_col = (int)(num_row*col_stretch);
 		mesh_terrain = GameObject.Find("Terrain");
 		mesh = GetComponent<MeshFilter> ().mesh;
