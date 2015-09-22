@@ -35,10 +35,18 @@ public class Human : Player
 		this.units [0] = new_unit;
 		hex.setUnit((Unit)this.units [0]);
 		available--;
+		unit_counter++;
+		this.units [0].id = unit_counter;
+		this.units [0].player = this;
 	}
 
 	override public void setupUnits(Map map){
 
+	}
+
+	override public void removeUnit(Unit unit){
+		this.units = new Unit[0];
+		available++;
 	}
 
 }

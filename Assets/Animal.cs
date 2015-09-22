@@ -88,10 +88,18 @@ using UnityEngine;
 						this.move ();
 						break;
 					}
+					if(GameEngine.map.terrain[x+1, y].hasUnit()){
+						this.move ();
+						break;
+					}
 					move (GameEngine.map.terrain[x+1, y]);
 					break;
 				case 1:
 					if(y+1 >= GameEngine.num_col){
+						this.move ();
+						break;
+					}
+					if(GameEngine.map.terrain[x, y+1].hasUnit()){
 						this.move ();
 						break;
 					}
@@ -102,10 +110,18 @@ using UnityEngine;
 						this.move ();
 						break;
 					}
+					if( GameEngine.map.terrain[x-1, y+1].hasUnit() ){
+						this.move ();
+						break;
+					}
 					move (GameEngine.map.terrain[x-1,y+1]);
 					break;
 				case 3:
 					if(x-1 <= 0){
+						this.move ();
+						break;
+					}
+					if( GameEngine.map.terrain[x-1, y].hasUnit() ){
 						this.move ();
 						break;
 					}
@@ -116,10 +132,18 @@ using UnityEngine;
 						this.move ();
 						break;
 					}
+					if( GameEngine.map.terrain[x-1, y-1].hasUnit() ){
+						this.move ();
+						break;
+					}
 					move (GameEngine.map.terrain[x-1, y-1]);
 					break;
 				case 5:
 					if(y-1 <= 0){
+						this.move ();
+						break;
+					}
+					if( GameEngine.map.terrain[x, y-1].hasUnit() ){
 						this.move ();
 						break;
 					}

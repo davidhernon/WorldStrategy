@@ -7,6 +7,7 @@ public abstract class Player
 	public bool is_players_turn = false;
 	public Unit[] units;
 	public int available;
+	public int unit_counter = 0;
 
 	public Player (string name) {
 		this.playerName = name;
@@ -34,7 +35,8 @@ public abstract class Player
 		}
 		Debug.Log (this.playerName + " Turn was Started");
 	}
-	
+
+	public abstract void removeUnit(Unit unit);
 	public abstract void move();
 	public abstract void setupUnits(Map map, Hex hex);
 	public abstract void setupUnits(Map map);

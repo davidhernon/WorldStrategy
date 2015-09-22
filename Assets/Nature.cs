@@ -43,8 +43,12 @@ public class Nature : Player
 				Vector3 position = temp.center;
 				Animal newAnimal = new Animal(position);
 				newAnimal.on_hex = temp;
+				newAnimal.id = unit_counter;
+				unit_counter++;
+				newAnimal.player = this;
 				animals.Add ( newAnimal );
 				temp.setUnit(newAnimal);
+
 			}
 		}
 //		setupTrees ();
@@ -65,6 +69,14 @@ public class Nature : Player
 					}
 				}
 			}
+	}
+
+	override public void removeUnit(Unit unit){
+		Debug.Log ("length before killed: " + animals.Count);
+		unit.on_hex.unit = null;
+		unit.on_hex = null;
+		animals.Remove ((Animal)unit);
+		Debug.Log ("length after killed : " + animals.Count);
 	}
 
 }

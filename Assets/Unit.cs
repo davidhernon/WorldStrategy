@@ -18,6 +18,7 @@ using UnityEngine;
 		public Vector3 vector;
 		public Hex on_hex;
 		List<Hex> path = new List<Hex> ();
+		public int id = -1;
 		
 
 		// STATS
@@ -30,7 +31,7 @@ using UnityEngine;
 		public int hunger_per_turn = 1;
 		public int max_health = 10;
 
-		public int strength = 5;
+		public int strength = 20;
 		public int defend = 1;
 
 		public GameObject unit_marker;
@@ -123,19 +124,21 @@ using UnityEngine;
 	}
 
 	public void attack(Hex hex){
-		hex.unit.health -= (this.attack - hex.unit.defend);
+		hex.unit.health -= (this.strength-hex.unit.defend);
 		this.health -= hex.unit.defend;
 		if (hex.unit.health < 0) {
 			hex.unit.killed();
+			this.move (hex);
 		}
 		if (this.health < 0) {
-			hex.unit.killed();
+			this.killed();
 		}
+
 	}
 
 	public void killed(){
-
-		//Player.removeUnit(this);
+		GameEngine.Destroy (unit_marker);
+		player.removeUnit(this);
 	}
 
 	public string toString()
@@ -148,7 +151,7 @@ using UnityEngine;
 	}
 
 	public string getInfo(){
-		return "" + this.getName () + "\nMoves: " + this.moves;
+		return "" + this.getName () + "\nMoves: " + this.moves + "\nHealth: " + this.health;
 	}
 
 }
