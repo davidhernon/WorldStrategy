@@ -31,6 +31,7 @@ public class World7 : MonoBehaviour {
 	public static GameObject[] cities;
 	public static double avg_dist = 0.0;
 	public static int  d_count = 0;
+	public static int times = 0;
 	
 	
 	// Use this for initialization
@@ -108,152 +109,189 @@ public class World7 : MonoBehaviour {
 
 		int hy = y;
 		int hx = x;
+
+		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+
 		
-		if (hy == 0 && hx == 0) {
-
-			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-
-			addTriangles(hx,hy);
-			addColor(hx,hy,7);
-
-		} else if (hy == 0 && hx != 0) {
-
-			
-			map.terrain[hx,hy].vertices[1] = map.terrain[hx-1, hy].vertices[2];
-			map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-
-			addTriangles(hx,hy);
-			addColor(hx,hy,7);
-				
-
-		} else if (!odd) {
-				//even hex in y direc
-
-			if (hy != 0 && hx == 0) {
-
-				
-				map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [4];
-				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices [6];
-				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-
-				addTriangles(hx,hy);
-				addColor(hx,hy,7);
-
-			} else if (hy != 0 && hx != 0) {
-
-				map.terrain[hx, hy].vertices [0] = map.terrain[hx-1, hy - 1].vertices [5];
-				map.terrain[hx, hy].vertices [1] = map.terrain[hx - 1, hy].vertices [2];
-				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices[6];
-				map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-
-				addTriangles(hx,hy);
-				addColor(hx,hy,7);	
-
-			} else if (hx != 0 && hy != num_col - 1) {
-					print ("[ERROR] uncaught scenario in hex make: Code 1");
-					return;
-
-			} else {
-					print ("[ERROR] uncaught scenario in hex make: Code 2");
-					return;
-			}
-
-		} else {
-				//odd hex in y direc
-
-				if (hy != 0 && hx == 0 && hx != num_row - 1) {	
-
-						map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [5];
-						map.terrain[hx, hy].vertices [1] = map.terrain[hx, hy - 1].vertices [6];
-						map.terrain[hx, hy].vertices [2] = map.terrain[hx + 1, hy - 1].vertices [6];
-
-						addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-						addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-						addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-						addVertex(map.terrain[hx, hy].vertices[3],hx,hy,3);
-						addVertex(map.terrain[hx, hy].vertices[4],hx,hy,4);
-						addVertex(map.terrain[hx, hy].vertices[5],hx,hy,5);
-						addVertex(map.terrain[hx, hy].vertices[6],hx,hy,6);
-						addTriangles(hx,hy);
-						addColor(hx,hy,7);				
+		newTriangles.Add (times*7 + 1);
+		newTriangles.Add (times*7 + 0);
+		newTriangles.Add (times*7 + 3);
 		
-				} else if (hy!=0 && hx==num_row-1 && hx==0){
-
-				map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-				map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-				addTriangles(hx,hy);	
-				addColor(hx,hy,7);
-
-				} else if(hy!=0 && hx == num_row-1){
-
-					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-					addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-					addTriangles(hx,hy);
-					addColor(hx,hy,7);
+		newTriangles.Add (times*7 + 0);
+		newTriangles.Add (times*7 + 2);
+		newTriangles.Add (times*7 + 3);
 		
-				} else if(hy!=0 && hx!=num_row-1){
-
-					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-					map.terrain[hx, hy].vertices [2] = map.terrain[hx+1,hy-1].vertices[6];
-					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-					addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-					addTriangles(hx,hy);
-					addColor(hx,hy,7);
+		newTriangles.Add (times*7 + 2);
+		newTriangles.Add (times*7 + 5);
+		newTriangles.Add (times*7 + 3);
 		
-				} else{
-					print ("uncaught scenario in hex make");
-					return;
-				}
+		newTriangles.Add (times*7 + 3);
+		newTriangles.Add (times*7 + 5);
+		newTriangles.Add (times*7 + 6);
+		
+		newTriangles.Add (times*7 + 4);
+		newTriangles.Add (times*7 + 3);
+		newTriangles.Add (times*7 + 6);
+		
+		newTriangles.Add (times*7 + 1);
+		newTriangles.Add (times*7 + 3);
+		newTriangles.Add (times*7 + 4);
 
-		}
+		addTriangles(hx,hy);
+		addColor(hx,hy,7);
+		times ++;
+		
+//		if (hy == 0 && hx == 0) {
+//
+//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//
+//			addTriangles(hx,hy);
+//			addColor(hx,hy,7);
+//
+//		} else if (hy == 0 && hx != 0) {
+//
+//			
+//			map.terrain[hx,hy].vertices[1] = map.terrain[hx-1, hy].vertices[2];
+//			map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
+//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//
+//			addTriangles(hx,hy);
+//			addColor(hx,hy,7);
+//				
+//
+//		} else if (!odd) {
+//				//even hex in y direc
+//
+//			if (hy != 0 && hx == 0) {
+//
+//				
+//				map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [4];
+//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices [6];
+//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
+//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//
+//				addTriangles(hx,hy);
+//				addColor(hx,hy,7);
+//
+//			} else if (hy != 0 && hx != 0) {
+//
+//				map.terrain[hx, hy].vertices [0] = map.terrain[hx-1, hy - 1].vertices [5];
+//				map.terrain[hx, hy].vertices [1] = map.terrain[hx - 1, hy].vertices [2];
+//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices[6];
+//				map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
+//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
+//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//
+//				addTriangles(hx,hy);
+//				addColor(hx,hy,7);	
+//
+//			} else if (hx != 0 && hy != num_col - 1) {
+//					print ("[ERROR] uncaught scenario in hex make: Code 1");
+//					return;
+//
+//			} else {
+//					print ("[ERROR] uncaught scenario in hex make: Code 2");
+//					return;
+//			}
+//
+//		} else {
+//				//odd hex in y direc
+//
+//				if (hy != 0 && hx == 0 && hx != num_row - 1) {	
+//
+//						map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [5];
+//						map.terrain[hx, hy].vertices [1] = map.terrain[hx, hy - 1].vertices [6];
+//						map.terrain[hx, hy].vertices [2] = map.terrain[hx + 1, hy - 1].vertices [6];
+//
+//						addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//						addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
+//						addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//						addVertex(map.terrain[hx, hy].vertices[3],hx,hy,3);
+//						addVertex(map.terrain[hx, hy].vertices[4],hx,hy,4);
+//						addVertex(map.terrain[hx, hy].vertices[5],hx,hy,5);
+//						addVertex(map.terrain[hx, hy].vertices[6],hx,hy,6);
+//						addTriangles(hx,hy);
+//						addColor(hx,hy,7);				
+//		
+//				} else if (hy!=0 && hx==num_row-1 && hx==0){
+//
+//				map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
+//				map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
+//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
+//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//				addTriangles(hx,hy);	
+//				addColor(hx,hy,7);
+//
+//				} else if(hy!=0 && hx == num_row-1){
+//
+//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
+//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
+//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
+//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//					addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
+//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//					addTriangles(hx,hy);
+//					addColor(hx,hy,7);
+//		
+//				} else if(hy!=0 && hx!=num_row-1){
+//
+//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
+//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
+//					map.terrain[hx, hy].vertices [2] = map.terrain[hx+1,hy-1].vertices[6];
+//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
+//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//					addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//					addTriangles(hx,hy);
+//					addColor(hx,hy,7);
+//		
+//				} else{
+//					print ("uncaught scenario in hex make");
+//					return;
+//				}
+//
+//		}
 
 	}
 
@@ -290,21 +328,21 @@ public class World7 : MonoBehaviour {
 			UnityEngine.Random.Range(0.0f,1.0f),
 			UnityEngine.Random.Range(0.0f,1.0f), 
 			UnityEngine.Random.Range(0.0f,1.0f));*/
-		Color color = new Color();
-
-		if (map.terrain [x, y].type == "water") {
-			color = Color.cyan;
-		} else if (map.terrain [x, y].type == "sand") {
-			color = Color.yellow;
-		}else if (map.terrain [x, y].type == "grass") {
-			color = Color.green;
-		}else if (map.terrain [x, y].type == "rock") {
-			color = Color.gray;
-		}else if (map.terrain [x, y].type == "snow") {
-			color = Color.white;
-		} else {
-			color = Color.magenta;
-		}
+//		Color color = new Color();
+//
+//		if (map.terrain [x, y].type == "water") {
+//			color = Color.cyan;
+//		} else if (map.terrain [x, y].type == "sand") {
+//			color = Color.yellow;
+//		}else if (map.terrain [x, y].type == "grass") {
+//			color = Color.green;
+//		}else if (map.terrain [x, y].type == "rock") {
+//			color = Color.gray;
+//		}else if (map.terrain [x, y].type == "snow") {
+//			color = Color.white;
+//		} else {
+//			color = Color.magenta;
+//		}
 
 		for(int i=0; i < count; i++){
 			newColor.Add(ColorGenerator.getColorFromString (map.terrain[x,y].type));
@@ -314,7 +352,7 @@ public class World7 : MonoBehaviour {
 	public static void addVertex(Vector3 vert, int x, int y, int pos){
 
 		newVertices.Add (vert);
-		map.terrain[x,y].id_list[pos] = vertex_count; 
+//		map.terrain[x,y].id_list[pos] = vertex_count; 
 		vertex_count++;
 
 	}
@@ -336,32 +374,5 @@ public class World7 : MonoBehaviour {
 		newColor.Clear ();
 
 	}
-
-//	Hex getMouseHex(Vector3 world){
-//		for(int i=0; i < num_row; i++){
-//			for(int j=0; j < num_col; j++){
-//				if(map.terrain[i,j].inBoundingBox(world)){
-//					return map.terrain[i,j];
-//				}
-//			}
-//		}
-//		return null;
-//	}
-
-	void OnGUI(){
-//		if(showTile){
-//			GUI.Box(new Rect(10, 10, 130, 90), tileInfo);
-//		}
-	}
-
-//	private static string getTileInfo(Hex[,] terrain, int i, int j){
-//		return terrain [i, j].getTileInfo (); 
-//	}
-
-
-
-
 	
-	
-	// End of Class
 }

@@ -16,6 +16,7 @@ public class GameEngine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Screen.SetResolution(1920, 1080, true, 60);
 		GameEngine.num_row = World7.num_row;
 		GameEngine.num_col = World7.num_col;
 		GameEngine.map = World7.map;
@@ -28,7 +29,7 @@ public class GameEngine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetMouseButtonDown (1)) {
+		if (Input.GetMouseButtonUp (1)) {
 			RaycastHit hit;
 			Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if(Physics.Raycast(ray2, out hit, 10000f)){
@@ -85,7 +86,7 @@ public class GameEngine : MonoBehaviour {
 			GUI.Box(new Rect(10, 10, 130, 90), selected_hex.getTileInfo());
 		}
 
-//		GUI.Box (new Rect (10, Screen.height - 40, 130, 30), "Player: " + players[player].playerName);
+		GUI.Box (new Rect (10, Screen.height - 40, 130, 30), "Player: " + players[player].playerName);
 
 	}
 

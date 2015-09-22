@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using System.IO;
+//using System.Collections;
 
 public class Hex {
 	
@@ -221,6 +219,32 @@ public class Hex {
 		} else {
 			return true;
 		}
+	}
+
+	public List<Hex> getNeighbors(){
+		Hex[,] terrain = GameEngine.map.terrain;
+		List<Hex> neighbor_hexes = new List<Hex> ();
+		Debug.Log ("Getting neighbors");
+		if (terrain [(int)pos.x + 1, (int)pos.y] != null) {
+			neighbor_hexes.Add (terrain [(int)pos.x + 1, (int)pos.y]);
+		}
+		if (terrain[(int)pos.x,(int)pos.y+1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y+1]);
+		}
+		if (terrain[(int)pos.x-1,(int)pos.y+1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1,(int)pos.y+1]);
+		}
+		if (terrain[(int)pos.x-1, (int)pos.y] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y]);
+		}
+		if (terrain[(int)pos.x,(int)pos.y-1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y-1]);
+		}
+		if (terrain[(int)pos.x-1, (int)pos.y-1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y-1]);
+		}
+
+		return neighbor_hexes;
 	}
 
 	}

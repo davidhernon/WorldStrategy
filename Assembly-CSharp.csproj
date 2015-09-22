@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\AI.cs" />
      <Compile Include="Assets\Animal.cs" />
+     <Compile Include="Assets\Astar.cs" />
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\ColorGenerator.cs" />
      <Compile Include="Assets\GameEngine.cs" />

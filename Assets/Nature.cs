@@ -47,24 +47,24 @@ public class Nature : Player
 				temp.setUnit(newAnimal);
 			}
 		}
-		setupTrees ();
+//		setupTrees ();
 	}
 
 	public void setupTrees(){
-		for (int k=0; k<100; k++) {
 			for (int i=0; i < GameEngine.num_row; i++) {
 				for (int j=0; j < GameEngine.num_col; j++) {
-//				GameObject tree = GameObject.Instantiate(Resources.Load("tree")) as GameObject;
-					if (GameUtils.isLand (GameEngine.map.terrain [i, j]) && Random.Range (0, 100) < 11) {
-						GameObject tree = GameObject.Instantiate (Resources.Load ("tree")) as GameObject;
-						tree.transform.position = GameEngine.map.terrain [i, j].center;
-						tree.transform.localScale = new Vector3 (0.01f, 0.01f, 0.01f);
-						tree.transform.localScale = new Vector3 (tree.transform.localScale.x, tree.transform.localScale.y * -1, tree.transform.localScale.z * -1);
-						//				tree.transform.localRotation = new Quarternion(0,0,180);
+					for(int k=0; k < 5; k++){
+	//				GameObject tree = GameObject.Instantiate(Resources.Load("tree")) as GameObject;
+						if (GameUtils.isLand (GameEngine.map.terrain [i, j]) && Random.Range (0, 100) < 31) {
+							GameObject tree = GameObject.Instantiate (Resources.Load ("tree")) as GameObject;
+						tree.transform.position = GameEngine.map.terrain [i, j].center + new Vector3(Random.Range (-2.0f, 2.0f),0,Random.Range (-2.0f, 2.0f));
+							tree.transform.localScale = new Vector3 (0.005f, 0.005f, 0.005f);
+							tree.transform.localScale = new Vector3 (tree.transform.localScale.x, tree.transform.localScale.y * -1, tree.transform.localScale.z * -1);
+							//				tree.transform.localRotation = new Quarternion(0,0,180);
+						}
 					}
 				}
 			}
-		}
 	}
 
 }

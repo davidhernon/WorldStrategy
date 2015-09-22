@@ -7,4 +7,5 @@
 *.sln
 *.user
 *.userprefs
+*./Temp
 *.DS_store

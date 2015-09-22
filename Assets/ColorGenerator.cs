@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ColorGenerator : MonoBehaviour {
 
-	public static Color[] deep_water = new Color[]{ new Color(0f/255f,152f/255f,186f/255f)};
+	public static Color[] deep_water = new Color[]{ new Color(0f/255f,152f/255f,186f/255f), new Color(29f/255f,169f/255f,248f/255f)};
 	public static Color[] shallow_water = new Color[]{new Color(125f/255f,215f/255f,235f/255f)};
 	public static Color[] sand = new Color[]{new Color(245f/255f,221f/255f,173f/255f)};
 	public static Color[] desert = new Color[]{new Color(240f/255f,166f/255f,120f/255f)};
@@ -65,7 +65,7 @@ public class ColorGenerator : MonoBehaviour {
 		return shallow_water[Random.Range(0, shallow_water.Length)];
 	}
 	public static Color getSand(){
-		return sand[Random.Range(0, deep_water.Length)];
+		return sand[Random.Range(0, deep_water.Length-1)];
 	}
 	public static Color getGrass(){
 		return grass[Random.Range(0, grass.Length)];;
