@@ -18,13 +18,24 @@ using UnityEngine;
 		public Vector3 vector;
 		public Hex on_hex;
 		List<Hex> path = new List<Hex> ();
+		
+
+		// STATS
 		public string name = "Tribesman";
 		public int moves = 0;
 		public int max_moves = 2;
+		public int health = 10;
+		public int health_recovery_per_turn = 2;
+		public int hunger = 0;
+		public int hunger_per_turn = 1;
+		public int max_health = 10;
 
-		
+		public int strength = 5;
+		public int defend = 1;
 
 		public GameObject unit_marker;
+
+		public Player player;
 
 		public Unit ()
 		{
@@ -69,6 +80,11 @@ using UnityEngine;
 
 	public void resetMove(){
 		this.moves = max_moves;
+		this.hunger += hunger_per_turn;
+		this.health += health_recovery_per_turn;
+		if (this.health > this.max_health) {
+			this.health = this.max_health;
+		}
 	}
 
 	public void move(Vector3 vector, Hex hex)
@@ -81,13 +97,18 @@ using UnityEngine;
 
 	public void move(Hex hex){
 
-
 		int distance = (int)Vector2.Distance (on_hex.pos, hex.pos);
 		Debug.Log ("distance: " + distance);
 		int temp_move = Mathf.RoundToInt(moves -  distance);
 		if (temp_move < 0) {
 			return;
 		}
+
+		if (hex.hasUnit ()) {
+			this.attack(hex);
+			return;
+		}
+
 		this.moves = temp_move;
 		if (this.moves < 0)
 			moves = 0;
@@ -101,7 +122,21 @@ using UnityEngine;
 		hex.unit = this;
 	}
 
-	public void move (){}
+	public void attack(Hex hex){
+		hex.unit.health -= (this.attack - hex.unit.defend);
+		this.health -= hex.unit.defend;
+		if (hex.unit.health < 0) {
+			hex.unit.killed();
+		}
+		if (this.health < 0) {
+			hex.unit.killed();
+		}
+	}
+
+	public void killed(){
+
+		//Player.removeUnit(this);
+	}
 
 	public string toString()
 	{

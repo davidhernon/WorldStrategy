@@ -12,6 +12,14 @@ using UnityEngine;
 
 	public class Animal : Unit
 	{
+	//Stats
+	public int health = 10;
+	public int health_recovery_per_turn = 1;
+	public int hunger_per_turn = 0;
+	public int max_health = 10;
+	public int strength = 3;
+	public int defend = 1;
+
 		public Animal ()
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);

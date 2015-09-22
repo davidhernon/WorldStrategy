@@ -38,4 +38,5 @@ public abstract class Player
 	public abstract void move();
 	public abstract void setupUnits(Map map, Hex hex);
 	public abstract void setupUnits(Map map);
+
 }
