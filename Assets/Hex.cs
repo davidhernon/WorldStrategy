@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using System.IO;
+//using System.Collections;
 
 public class Hex {
 	
@@ -16,6 +14,7 @@ public class Hex {
 	public bool coast = false;
 	public string[] lowestNeighbor = new string[7];
 	public bool city = false;
+//	public bool hasUnit = false;
 	public float defense = 0f;
 	public float industry = 0f;
 	public float food = 0f;
@@ -200,25 +199,52 @@ public class Hex {
 		}
 
 		public double getHexAverageElevation(){
-			//Debug.Log ((vertices[0].z + vertices[1].z + vertices[2].z + vertices[3].z + vertices[4].z + vertices[5].z + vertices[6].z)/7f);
 			return this.avg_height;
 		}
 
 		public string getTileInfo(){
-			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y);
+			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y + "\nHas Unit: " + this.hasUnit());
 		}
 
 	public void setUnit(Unit n)
 	{
+		this.unit = new Unit ();
 		this.unit = n;
 	}
 		
 	public bool hasUnit()
 	{
-		if (this.unit == null)
+		if (this.unit == null) {
 			return false;
-		else
+		} else {
 			return true;
+		}
+	}
+
+	public List<Hex> getNeighbors(){
+		Hex[,] terrain = GameEngine.map.terrain;
+		List<Hex> neighbor_hexes = new List<Hex> ();
+		Debug.Log ("Getting neighbors");
+		if (terrain [(int)pos.x + 1, (int)pos.y] != null) {
+			neighbor_hexes.Add (terrain [(int)pos.x + 1, (int)pos.y]);
+		}
+		if (terrain[(int)pos.x,(int)pos.y+1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y+1]);
+		}
+		if (terrain[(int)pos.x-1,(int)pos.y+1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1,(int)pos.y+1]);
+		}
+		if (terrain[(int)pos.x-1, (int)pos.y] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y]);
+		}
+		if (terrain[(int)pos.x,(int)pos.y-1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y-1]);
+		}
+		if (terrain[(int)pos.x-1, (int)pos.y-1] != null) {
+			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y-1]);
+		}
+
+		return neighbor_hexes;
 	}
 
 	}

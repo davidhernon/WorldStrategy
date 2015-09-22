@@ -12,8 +12,8 @@ using System.Collections;
 public class Map {
 
 	public Hex[,] terrain;
-	private int num_row = 10;
-	private int num_col = 10;
+	public int num_row = 10;
+	public int num_col = 10;
 	private int x_off = 1;
 	private int y_off = 1;
 	private Vector2 shift = new Vector2(Random.Range (0.0f,1.0f),Random.Range (0.0f,1.0f));
@@ -64,26 +64,8 @@ public class Map {
 		for(int i=0; i<num_row; i++){
 			for(int j=0; j < num_col; j++){
 				this.terrain[i,j] = new Hex();
-				//this.terrain[i,j].type = "land";
-				/*if(i==0 || i==num_row-1 || j==0 || j==num_col-1){
-					this.terrain[i,j].type = "land";
-				}
-				if((i < inx || i > num_row - inx || j < iny || j > num_col - iny) && UnityEngine.Random.Range(0,100) > 50){
-					this.terrain[i,j].type = "water";
-				}else{
-				//	this.terrain[i,j].type = "land";
-				}*/
 			}
 		}
-		// Reiterate through the array and do "Game of Life"-esque ops
-		// Experimental right now, uncomment to test
-		/*for(int i=1; i<num_row-1; i++){
-			for(int j=1; j < num_col-1; j++){
-				if(this.terrain[i,j].type == "water" && neighborHexTypes(i,j,"land") >= 4){
-					this.terrain[i,j].type = "land";
-				}
-			}
-		}*/
 	}
 
 	public double[,] generateNoiseArray(double[,] array, int rows, int cols, float[] zoom_array, float[] blend_array){
@@ -349,10 +331,17 @@ public class Map {
 				// }
 
 				if(terrain[i,j].getHexAverageElevation() <= 0.0){
-					if(getDepth(i,j) > 10){
+					if(getDepth(i,j) > 30){
 						terrain[i,j].type = "deep_water";
-					}else{
+					}else if(getDepth (i,j) > 10){
 						terrain[i,j].type = "shallow_water";
+					}else{
+						if(Random.Range (0,100) < 20){
+							terrain[i,j].type = "sand";
+						}else{
+							terrain[i,j].type = "grass";
+						}
+
 					}
 
 					if(i==0 || i == num_row-1 || j==0 || j == num_col-1){

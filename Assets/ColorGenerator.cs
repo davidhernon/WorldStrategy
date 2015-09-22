@@ -16,6 +16,9 @@ public class ColorGenerator : MonoBehaviour {
 	public static Color[] marsh = new Color[]{new Color(85f/255f,212f/255f,159f/255f)};
 	public static Color[] jungle = new Color[]{new Color(33f/255f,115f/255f,13f/255f)};
 
+	//Units
+	public static Color[] unit_marker_basic = new Color[]{new Color(242f/255f,207f/255f,170f/255f)};
+
 	public static int deep_water_it, shallow_water_it, sand_it, grass_it, plains_it, forest_it, tundra_it, rock_it, snow_it = -1;
 
 	public static Color getColorFromString(string color_string){
@@ -48,19 +51,21 @@ public class ColorGenerator : MonoBehaviour {
 			return getMarsh ();
 		case "jungle":
 			return getJungle();
+		case "unit_marker_basic":
+			return getUnitMarkerBasic();
 		default:
 			return Color.magenta;
 		}
 	}
 
 	public static Color getDeepWater(){
-		return deep_water[Random.Range(0, deep_water.Length)];
+		return deep_water[Random.Range(0, deep_water.Length-1)];
 	}
 	public static Color getShallowWater(){
 		return shallow_water[Random.Range(0, shallow_water.Length)];
 	}
 	public static Color getSand(){
-		return sand[Random.Range(0, deep_water.Length)];
+		return sand[Random.Range(0, sand.Length-1)];
 	}
 	public static Color getGrass(){
 		return grass[Random.Range(0, grass.Length)];;
@@ -88,6 +93,9 @@ public class ColorGenerator : MonoBehaviour {
 	}
 	public static Color getJungle(){
 		return jungle[Random.Range(0, jungle.Length)];;
+	}
+	public static Color getUnitMarkerBasic(){
+		return unit_marker_basic [Random.Range (0, unit_marker_basic.Length)];
 	}
 
 }

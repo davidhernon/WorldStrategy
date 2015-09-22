@@ -72,7 +72,7 @@ public class World4 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		GameObject.Find("Plane").renderer.material.color = Color.cyan;
+		GameObject.Find("Plane").GetComponent<Renderer>().material.color = Color.cyan;
 		
 		mesh_terrain = GameObject.Find("Terrain");
 		mesh = GetComponent<MeshFilter> ().mesh;

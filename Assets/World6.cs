@@ -138,7 +138,7 @@ public class World6 : MonoBehaviour {
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 		meshc.sharedMesh = mesh; // Give it your mesh here.
 		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		sphere1.collider.enabled = false;
+		sphere1.GetComponent<Collider>().enabled = false;
 
 	}
 	
