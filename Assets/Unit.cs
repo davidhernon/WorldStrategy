@@ -97,7 +97,9 @@ using UnityEngine;
 	}
 
 	public void move(Hex hex){
-
+		if (on_hex == hex) {
+			return;
+		}
 		int distance = (int)Vector2.Distance (on_hex.pos, hex.pos);
 		Debug.Log ("distance: " + distance);
 		int temp_move = Mathf.RoundToInt(moves -  distance);
