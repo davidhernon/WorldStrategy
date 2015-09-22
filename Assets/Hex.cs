@@ -203,7 +203,7 @@ public class Hex {
 		}
 
 		public string getTileInfo(){
-			return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y + "\nHas Unit: " + this.hasUnit());
+		return ("" + type + "\nDefense: " + defense + "\nFood: " + food + "\nIndustry: " + industry + "\nPosition: " + pos.x + ", " + pos.y );
 		}
 
 	public void setUnit(Unit n)

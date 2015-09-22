@@ -23,7 +23,7 @@ public class AI : Player
 		
 	}
 
-	override public void setupUnits(Map map, Vector2 vector)
+	override public void setupUnits(Map map, Hex hex)
 	{
 	}
 

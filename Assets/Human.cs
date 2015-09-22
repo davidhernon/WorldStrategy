@@ -15,8 +15,7 @@ public class Human : Player
 
 	public Human (string name) : base(name)
 	{
-
-
+		this.available = 1;
 	}
 
 	override public void move()
@@ -29,13 +28,15 @@ public class Human : Player
 
 	}
 
-	override public void setupUnits(Map map, Vector2 vector)
+	override public void setupUnits(Map map, Hex hex)
 	{
 		this.units = new Unit[1];
-		Unit new_unit = new Unit (map.terrain[(int)vector.x, (int)vector.y].center);
+		Unit new_unit = new Unit (hex);
 		this.units [0] = new_unit;
-		map.terrain[(int)vector.x, (int)vector.y].setUnit((Unit)this.units [0]);
+		hex.setUnit((Unit)this.units [0]);
+		available--;
 	}
+
 	override public void setupUnits(Map map){
 
 	}

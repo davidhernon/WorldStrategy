@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 public class Nature : Player
 {
-	private int total_units;
+	public int total_units;
 	public static List<Animal> animals  = new List<Animal>();
 //	public static List<
 
@@ -30,13 +30,13 @@ public class Nature : Player
 		}
 	}
 
-	override public void setupUnits(Map map, Vector2 vector)
+	override public void setupUnits(Map map, Hex hex)
 	{
 	}
 
 
 	override public void setupUnits(Map map){
-		total_units = (int)( GameEngine.num_col * GameEngine.num_row * 0.15);
+		total_units = (int)( GameEngine.num_col * GameEngine.num_row * 0.05);
 		for (int i=0; i< total_units; i++) {
 			Hex temp = map.terrain[Random.Range (0,GameEngine.num_row), Random.Range (0, GameEngine.num_col)];
 			if(GameUtils.isLand(temp)){

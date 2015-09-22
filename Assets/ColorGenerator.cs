@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ColorGenerator : MonoBehaviour {
@@ -15,6 +15,7 @@ public class ColorGenerator : MonoBehaviour {
 	public static Color[] snow = new Color[]{new Color(255f/255f,255f/255f,255f/255f)};
 	public static Color[] marsh = new Color[]{new Color(85f/255f,212f/255f,159f/255f)};
 	public static Color[] jungle = new Color[]{new Color(33f/255f,115f/255f,13f/255f)};
+	public static Color[] animal = new Color[]{Color.yellow};
 
 	//Units
 	public static Color[] unit_marker_basic = new Color[]{new Color(242f/255f,207f/255f,170f/255f)};
@@ -53,6 +54,8 @@ public class ColorGenerator : MonoBehaviour {
 			return getJungle();
 		case "unit_marker_basic":
 			return getUnitMarkerBasic();
+		case "animal":
+			return getAnimal();
 		default:
 			return Color.magenta;
 		}
@@ -96,6 +99,9 @@ public class ColorGenerator : MonoBehaviour {
 	}
 	public static Color getUnitMarkerBasic(){
 		return unit_marker_basic [Random.Range (0, unit_marker_basic.Length)];
+	}
+	public static Color getAnimal(){
+		return animal [0];
 	}
 
 }

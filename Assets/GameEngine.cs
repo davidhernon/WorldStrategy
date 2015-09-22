@@ -73,21 +73,40 @@ public class GameEngine : MonoBehaviour {
 		if (GUI.Button (new Rect (Screen.width - 130, Screen.height - 40, 130, 30), "End Turn")) {
 			players[player].endPlayersTurn();
 			player = (player+1)%(players.Length);
+			players[player].startPlayersTurn();
 		}
-		if(GUI.Button(new Rect(Screen.width-130,Screen.height - 90,130,30), "Spawn Unit")) {
-			Vector2 loc = selected_hex.pos;
-			players[player].setupUnits(map, loc);
-		}
-		if(GUI.Button(new Rect(Screen.width-130,Screen.height - 140,130,30), "Spawn Nature")) {
-			players[1].setupUnits(map);
-		}
-
+//		if(GUI.Button(new Rect(Screen.width-130,Screen.height - 90,130,30), "Spawn Unit")) {
+//			Vector2 loc = selected_hex.pos;
+//			players[player].setupUnits(map, loc);
+//		}
 		if (show_tile) {
 			GUI.Box(new Rect(10, 10, 130, 90), selected_hex.getTileInfo());
 		}
 
-		GUI.Box (new Rect (10, Screen.height - 40, 130, 30), "Player: " + players[player].playerName);
+		string bottom_left = "";
+		if (player == 0) {
+		bottom_left	= "Player: " + players [player].playerName + "\nUnits: " + ((Nature)players[0]).total_units + " " + "\nAvailable: 0";
 
+		} else {
+			bottom_left	= "Player: " + players [player].playerName + "\nUnits: " + ((Human)players[1]).units.Length + "\nAvailable: " + ((Human)players[1]).available;
+		}
+		if (selected_hex != null && selected_hex.unit != null) {
+			bottom_left += "\n*---Unit---*\n" + selected_hex.unit.getInfo ();
+		}
+//		string final = bottom_left + "\n*---Unit---*\n" + selected_hex.getTileInfo ();
+
+		GUI.Box (new Rect (10, Screen.height - 160, 130, 150), bottom_left);
+
+		if (selected_hex !=null && player == 1 && players[1].available > 0) {
+			if(GUI.Button (new Rect(10, 110, 125, 30), "Spawn Unit")){
+				setupUnitsOnHex();
+			}
+		}
+
+	}
+
+	void setupUnitsOnHex(){
+		players[player].setupUnits(map, selected_hex);
 	}
 
 	void SetMap(Map new_map)

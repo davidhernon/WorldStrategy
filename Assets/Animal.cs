@@ -16,16 +16,18 @@ using UnityEngine;
 		{
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = new Vector3(-1000,-1000,0);
-			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("grass");
+			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("animal");
 			
 		}
 		
 		public Animal (Vector3 vector)
 		{
+			this.name = "Animal";
+			this.max_moves = 1;
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = vector;
 			this.vector = vector;
-			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("grass");
+			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("animal");
 			
 			Vector2 hex_coordinates = GameUtils.getHexMapCoordinatesFromPoint (GameEngine.map, 	new Vector3(vector.x, vector.y + 1.0f, vector.z), GameEngine.num_row, GameEngine.num_col);
 			Hex hexAtPoint = GameUtils.getHexFromPoint (vector, GameEngine.map, GameEngine.num_row, GameEngine.num_col);
@@ -72,7 +74,6 @@ using UnityEngine;
 			Vector2 position = on_hex.pos;
 			int x = (int)position.x;
 			int y = (int)position.y;
-			Debug.Log (position);
 			switch (r) {
 				case 0:
 					if(x+1 >= GameEngine.num_row){
