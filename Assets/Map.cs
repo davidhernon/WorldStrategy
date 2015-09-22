@@ -331,10 +331,17 @@ public class Map {
 				// }
 
 				if(terrain[i,j].getHexAverageElevation() <= 0.0){
-					if(getDepth(i,j) > 10){
+					if(getDepth(i,j) > 30){
 						terrain[i,j].type = "deep_water";
-					}else{
+					}else if(getDepth (i,j) > 10){
 						terrain[i,j].type = "shallow_water";
+					}else{
+						if(Random.Range (0,100) < 20){
+							terrain[i,j].type = "sand";
+						}else{
+							terrain[i,j].type = "grass";
+						}
+
 					}
 
 					if(i==0 || i == num_row-1 || j==0 || j == num_col-1){

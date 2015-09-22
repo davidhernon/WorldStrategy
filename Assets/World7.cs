@@ -9,9 +9,9 @@ public class World7 : MonoBehaviour {
 	private Mesh mesh;
 	private GameObject mesh_terrain;
 	public static int num_row = 63; //75, 63
-	public static int c_lengthx = 63*4;
-	public static int c_lengthy = 63*3 + 1;
-	public static int c_lengthz = 0;
+//	public static int c_lengthx = 63*4;
+//	public static int c_lengthy = 63*3 + 1;
+//	public static int c_lengthz = 0;
 	private static float col_stretch = 2.3f; //1.618, 2.3
 	public static int num_col = 0;
 	private static int x_off = 0;
@@ -109,6 +109,54 @@ public class World7 : MonoBehaviour {
 
 		int hy = y;
 		int hx = x;
+		// Add Hexes by Triangles
+//		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//		newTriangles.Add (times * 18 + 0);
+//		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//		newTriangles.Add (times * 18 + 1);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 2);
+//
+//		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//		newTriangles.Add (times * 18 + 3);
+//		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//		newTriangles.Add (times * 18 + 4);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 5);
+//
+//
+//		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//		newTriangles.Add (times * 18 + 6);
+//		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//		newTriangles.Add (times * 18 + 7);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 8);
+//
+//
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 9);
+//		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//		newTriangles.Add (times * 18 + 10);
+//		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//		newTriangles.Add (times * 18 + 11);
+//
+//
+//		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//		newTriangles.Add (times * 18 + 12);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 13);
+//		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//		newTriangles.Add (times * 18 + 14);
+//
+//		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//		newTriangles.Add (times * 18 + 15);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		newTriangles.Add (times * 18 + 16);
+//		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//		newTriangles.Add (times * 18 + 17);
+//
+//		addColor(hx,hy,18);
+
 
 		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
 		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
@@ -117,7 +165,6 @@ public class World7 : MonoBehaviour {
 		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
 		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
 		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-
 		
 		newTriangles.Add (times*7 + 1);
 		newTriangles.Add (times*7 + 0);
@@ -143,7 +190,7 @@ public class World7 : MonoBehaviour {
 		newTriangles.Add (times*7 + 3);
 		newTriangles.Add (times*7 + 4);
 
-		addTriangles(hx,hy);
+//		addTriangles(hx,hy);
 		addColor(hx,hy,7);
 		times ++;
 		
@@ -344,8 +391,11 @@ public class World7 : MonoBehaviour {
 //			color = Color.magenta;
 //		}
 
-		for(int i=0; i < count; i++){
-			newColor.Add(ColorGenerator.getColorFromString (map.terrain[x,y].type));
+		for (int i=0; i < count; i++) {
+			Color tri = ColorGenerator.getColorFromString (map.terrain [x, y].type);
+//			for (int j=0; j < 3; j++){
+				newColor.Add (tri);
+//			}
 		}
 	}
 
