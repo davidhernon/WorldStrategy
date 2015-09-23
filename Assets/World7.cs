@@ -8,7 +8,7 @@ public class World7 : MonoBehaviour {
 	public static Map map;
 	private Mesh mesh;
 	private GameObject mesh_terrain;
-	public static int num_row = 63; //75, 63
+	public static int num_row = 30; //75, 63
 	public static int c_lengthx = 63*4;
 	public static int c_lengthy = 63*3 + 1;
 	public static int c_lengthz = 0;
@@ -110,188 +110,95 @@ public class World7 : MonoBehaviour {
 		int hy = y;
 		int hx = x;
 
-		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+//		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+//		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+//		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+//		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+//		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+//		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+//
+//		
+//		newTriangles.Add (times*7 + 1);
+//		newTriangles.Add (times*7 + 0);
+//		newTriangles.Add (times*7 + 3);
+//		
+//		newTriangles.Add (times*7 + 0);
+//		newTriangles.Add (times*7 + 2);
+//		newTriangles.Add (times*7 + 3);
+//		
+//		newTriangles.Add (times*7 + 2);
+//		newTriangles.Add (times*7 + 5);
+//		newTriangles.Add (times*7 + 3);
+//		
+//		newTriangles.Add (times*7 + 3);
+//		newTriangles.Add (times*7 + 5);
+//		newTriangles.Add (times*7 + 6);
+//		
+//		newTriangles.Add (times*7 + 4);
+//		newTriangles.Add (times*7 + 3);
+//		newTriangles.Add (times*7 + 6);
+//		
+//		newTriangles.Add (times*7 + 1);
+//		newTriangles.Add (times*7 + 3);
+//		newTriangles.Add (times*7 + 4);
+//
+//		addTriangles(hx,hy);
+//		addColor(hx,hy,7);
+
 		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
 		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
 		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
+		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+		addVertex (map.terrain [hx, hy].vertices [3], hx, hy, 3);
 		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
 		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
+		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
+		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
+		newTriangles.Add (times*18 + 0);
+		newTriangles.Add (times*18 + 1);
+		newTriangles.Add (times*18 + 2);
+		newTriangles.Add (times*18 + 3);
+				
+		newTriangles.Add (times*18 + 4);
+		newTriangles.Add (times*18 + 5);
+		newTriangles.Add (times*18 + 6);
+				
+		newTriangles.Add (times*18 + 7);
+		newTriangles.Add (times*18 + 8);
+		newTriangles.Add (times*18 + 9);
+				
+		newTriangles.Add (times*18 + 10);
+		newTriangles.Add (times*18 + 11);
+		newTriangles.Add (times*18 + 12);
+				
+		newTriangles.Add (times*18 + 13);
+		newTriangles.Add (times*18 + 14);
+		newTriangles.Add (times*18 + 15);
+				
+		newTriangles.Add (times*18 + 16);
+		newTriangles.Add (times*18 + 17);
+			
+		//New way
 
-		
-		newTriangles.Add (times*7 + 1);
-		newTriangles.Add (times*7 + 0);
-		newTriangles.Add (times*7 + 3);
-		
-		newTriangles.Add (times*7 + 0);
-		newTriangles.Add (times*7 + 2);
-		newTriangles.Add (times*7 + 3);
-		
-		newTriangles.Add (times*7 + 2);
-		newTriangles.Add (times*7 + 5);
-		newTriangles.Add (times*7 + 3);
-		
-		newTriangles.Add (times*7 + 3);
-		newTriangles.Add (times*7 + 5);
-		newTriangles.Add (times*7 + 6);
-		
-		newTriangles.Add (times*7 + 4);
-		newTriangles.Add (times*7 + 3);
-		newTriangles.Add (times*7 + 6);
-		
-		newTriangles.Add (times*7 + 1);
-		newTriangles.Add (times*7 + 3);
-		newTriangles.Add (times*7 + 4);
+		for(int i=0; i < 18/3; i++){
+			Color temp = ColorGenerator.getColorFromString (map.terrain[x,y].type);
+			for(int j=0; j < 3; j++){
+				newColor.Add(temp);
+			}
+		}
 
-		addTriangles(hx,hy);
-		addColor(hx,hy,7);
+
 		times ++;
-		
-//		if (hy == 0 && hx == 0) {
-//
-//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//			addTriangles(hx,hy);
-//			addColor(hx,hy,7);
-//
-//		} else if (hy == 0 && hx != 0) {
-//
-//			
-//			map.terrain[hx,hy].vertices[1] = map.terrain[hx-1, hy].vertices[2];
-//			map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//			addTriangles(hx,hy);
-//			addColor(hx,hy,7);
-//				
-//
-//		} else if (!odd) {
-//				//even hex in y direc
-//
-//			if (hy != 0 && hx == 0) {
-//
-//				
-//				map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [4];
-//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices [6];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//				addTriangles(hx,hy);
-//				addColor(hx,hy,7);
-//
-//			} else if (hy != 0 && hx != 0) {
-//
-//				map.terrain[hx, hy].vertices [0] = map.terrain[hx-1, hy - 1].vertices [5];
-//				map.terrain[hx, hy].vertices [1] = map.terrain[hx - 1, hy].vertices [2];
-//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices[6];
-//				map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//				addTriangles(hx,hy);
-//				addColor(hx,hy,7);	
-//
-//			} else if (hx != 0 && hy != num_col - 1) {
-//					print ("[ERROR] uncaught scenario in hex make: Code 1");
-//					return;
-//
-//			} else {
-//					print ("[ERROR] uncaught scenario in hex make: Code 2");
-//					return;
-//			}
-//
-//		} else {
-//				//odd hex in y direc
-//
-//				if (hy != 0 && hx == 0 && hx != num_row - 1) {	
-//
-//						map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [5];
-//						map.terrain[hx, hy].vertices [1] = map.terrain[hx, hy - 1].vertices [6];
-//						map.terrain[hx, hy].vertices [2] = map.terrain[hx + 1, hy - 1].vertices [6];
-//
-//						addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//						addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//						addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//						addVertex(map.terrain[hx, hy].vertices[3],hx,hy,3);
-//						addVertex(map.terrain[hx, hy].vertices[4],hx,hy,4);
-//						addVertex(map.terrain[hx, hy].vertices[5],hx,hy,5);
-//						addVertex(map.terrain[hx, hy].vertices[6],hx,hy,6);
-//						addTriangles(hx,hy);
-//						addColor(hx,hy,7);				
-//		
-//				} else if (hy!=0 && hx==num_row-1 && hx==0){
-//
-//				map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//				map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//				addTriangles(hx,hy);	
-//				addColor(hx,hy,7);
-//
-//				} else if(hy!=0 && hx == num_row-1){
-//
-//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//					addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//					addTriangles(hx,hy);
-//					addColor(hx,hy,7);
-//		
-//				} else if(hy!=0 && hx!=num_row-1){
-//
-//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//					map.terrain[hx, hy].vertices [2] = map.terrain[hx+1,hy-1].vertices[6];
-//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//					addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//					addTriangles(hx,hy);
-//					addColor(hx,hy,7);
-//		
-//				} else{
-//					print ("uncaught scenario in hex make");
-//					return;
-//				}
-//
-//		}
 
 	}
 

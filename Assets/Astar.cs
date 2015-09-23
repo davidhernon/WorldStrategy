@@ -6,7 +6,6 @@ public class Astar {
 
 
 	public static List<Hex> findPath(Hex start, Hex end){
-		Debug.Log("help");
 		List<Hex> path = new List<Hex>();
 		Hex temp = end;
 			//Always false
