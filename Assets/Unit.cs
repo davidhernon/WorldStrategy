@@ -26,13 +26,13 @@ using UnityEngine;
 		public int moves = 0;
 		public int max_moves = 2;
 		public int health = 10;
-		public int health_recovery_per_turn = 2;
+		public int health_recovery_per_turn = 1;
 		public int hunger = 0;
 		public int hunger_per_turn = 1;
 		public int max_health = 10;
 
-		public int strength = 20;
-		public int defend = 1;
+		public int strength = 5;
+		public int defend = 3;
 
 		public GameObject unit_marker;
 
@@ -94,6 +94,7 @@ using UnityEngine;
 		unit_marker.transform.position = vector;
 		this.on_hex = hex;
 		hex.unit = this;
+
 	}
 
 	public void move(Hex hex){
@@ -123,6 +124,8 @@ using UnityEngine;
 		this.on_hex.unit = null;
 		this.on_hex = hex;
 		hex.unit = this;
+		player.discoveredHex (hex);
+		GameEngine.selected_hex = hex;
 	}
 
 	public void attack(Hex hex){

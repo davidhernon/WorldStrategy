@@ -50,6 +50,7 @@
      <Compile Include="Assets\Astar.cs" />
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\ColorGenerator.cs" />
+     <Compile Include="Assets\Culture.cs" />
      <Compile Include="Assets\GameEngine.cs" />
      <Compile Include="Assets\GameStart.cs" />
      <Compile Include="Assets\GameUtils.cs" />
@@ -61,6 +62,7 @@
      <Compile Include="Assets\Nature.cs" />
      <Compile Include="Assets\Noise.cs" />
      <Compile Include="Assets\Player.cs" />
+     <Compile Include="Assets\Scenario.cs" />
      <Compile Include="Assets\SimplexnoiseGenerator.cs" />
      <Compile Include="Assets\Sources\LightningBolt.cs" />
      <Compile Include="Assets\TerrainFunctions.cs" />
@@ -77,22 +79,18 @@
      <Compile Include="Assets\World6.cs" />
      <Compile Include="Assets\World7.cs" />
      <None Include="Assets\Shader2.shader" />
+     <None Include="Assets\Vertex.shader" />
+     <None Include="Assets\AShader.shader" />
      <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Vertex Colored.shader" />
      <None Include="Assets\Crossfade.shader" />
      <None Include="Assets\Vertex2.shader" />
      <None Include="Assets\SimpleShader.shader" />
- <Reference Include="UnityEngine.Analytics">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

@@ -14,10 +14,10 @@ using UnityEngine;
 	{
 	//Stats
 	public int health = 10;
-	public int health_recovery_per_turn = 1;
+	public int health_recovery_per_turn = 3;
 	public int hunger_per_turn = 0;
 	public int max_health = 10;
-	public int strength = 3;
+	public int strength = 5;
 	public int defend = 1;
 
 		public Animal ()
@@ -77,74 +77,80 @@ using UnityEngine;
 			hex.unit = this;
 		}
 		
-		public void move() {
+		public void move(int n) {
+		if (n > 1000) {
+			return;
+		}
 			int r = Random.Range (0, 6);
+		if (Random.Range (0, 10) < 3) {
+			r = 0;
+		}
 			Vector2 position = on_hex.pos;
 			int x = (int)position.x;
 			int y = (int)position.y;
 			switch (r) {
 				case 0:
 					if(x+1 >= GameEngine.num_row){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if(GameEngine.map.terrain[x+1, y].hasUnit()){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x+1, y]);
 					break;
 				case 1:
 					if(y+1 >= GameEngine.num_col){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if(GameEngine.map.terrain[x, y+1].hasUnit()){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x, y+1]);
 					break;
 				case 2:
 					if(x-1 <= 0 || y+1 >= GameEngine.num_col){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y+1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1,y+1]);
 					break;
 				case 3:
 					if(x-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1,y]);
 					break;
 				case 4:
 					if(x-1 <= 0 || y-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y-1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1, y-1]);
 					break;
 				case 5:
 					if(y-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x, y-1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x, y-1]);

@@ -26,7 +26,7 @@ public class Nature : Player
 	override public void move()
 	{
 		foreach (Animal ani in animals) {
-			ani.move();
+			ani.move(0);
 		}
 	}
 
@@ -69,6 +69,9 @@ public class Nature : Player
 					}
 				}
 			}
+	}
+
+	override public void discoveredHex(Hex hex){
 	}
 
 	override public void removeUnit(Unit unit){
