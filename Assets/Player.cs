@@ -30,7 +30,6 @@ public abstract class Player
 	{
 		is_players_turn = false;
 		move ();
-		Debug.Log (this.playerName + " Turn was Ended");
 	}
 
 	public void startPlayersTurn()
@@ -39,7 +38,6 @@ public abstract class Player
 		for (int i=0; i < units.Length; i++) {
 			units[i].resetMove();
 		}
-		Debug.Log (this.playerName + " Turn was Started");
 	}
 	public abstract void discoveredHex(Hex hex);
 	public abstract void removeUnit(Unit unit);

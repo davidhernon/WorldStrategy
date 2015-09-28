@@ -81,5 +81,4 @@ public class Nature : Player
 		animals.Remove ((Animal)unit);
 		Debug.Log ("length after killed : " + animals.Count);
 	}
-
 }
