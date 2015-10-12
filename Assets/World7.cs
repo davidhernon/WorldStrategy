@@ -6,9 +6,9 @@ using System.Collections.Generic;
 public class World7 : MonoBehaviour {
 
 	public static Map map;
-	private Mesh mesh;
+	public static Mesh mesh;
 	private GameObject mesh_terrain;
-	public static int num_row = 63; //75, 63
+	public static int num_row = 30; //75, 63
 //	public static int c_lengthx = 63*4;
 //	public static int c_lengthy = 63*3 + 1;
 //	public static int c_lengthz = 0;
@@ -38,59 +38,29 @@ public class World7 : MonoBehaviour {
 	void Start () {
 
 		UnityEngine.Random.seed = (int)System.DateTime.Now.Ticks;
-
 		num_col = (int)(num_row*col_stretch);
 		mesh_terrain = GameObject.Find("Terrain");
 		mesh = GetComponent<MeshFilter> ().mesh;
-
 		map = new Map(num_row, num_col);
 		map.initHexes();
 		map.generateHeightMap();
-		
 		map.createHexBoard();
-		
 		map.generateMoistureMap();
-
 		map.setHexType();
 
 		createMesh();
 		buildMesh();
-
-		// cities = new GameObject[5];
-		// for(int i = 0 ; i < 5; i++){
-		// 	cities[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		// 	cities[i].transform.position = new Vector3(-1000,-1000,0);
-		// }
 		
 		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 		meshc.sharedMesh = mesh; // Give it your mesh here.
-//		sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-//		sphere1.GetComponent<Collider>().enabled = false;
 
-		GameObject ocean = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		ocean.transform.position = new Vector3(128f,20.1f,217f);
-		ocean.transform.localScale = new Vector3(256f,40f,440f);
-		ocean.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString("deep_water");
+//		Create an Ocean to make world look better
+//		GameObject ocean = GameObject.CreatePrimitive(PrimitiveType.Cube);
+//		ocean.transform.position = new Vector3(128f,20.1f,217f);
+//		ocean.transform.localScale = new Vector3(256f,40f,440f);
+//		ocean.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString("deep_water");
 
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-//		RaycastHit hit;
-//		Ray ray2 = Camera.main.ScreenPointToRay (Input.mousePosition);
-//		Debug.DrawRay (ray2.origin, ray2.direction * 10000, Color.yellow);
-//		if(Physics.Raycast(ray2, out hit, 10000f)){
-//			if(hit.collider.gameObject.CompareTag("Terrain")){
-//				Hex ret = getMouseHex(new Vector3(hit.point.x,hit.point.z,0));
-//				showTile = true;
-//				tileInfo = getTileInfo(map.terrain,(int)ret.pos.x, (int)ret.pos.y);
-//			}else{
-//				showTile = false;
-//			}
-//		}
-	
 	}
 
 	public static void createMesh(){
@@ -158,14 +128,18 @@ public class World7 : MonoBehaviour {
 //		addColor(hx,hy,18);
 
 
-		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-		
+		addVertex(map.terrain[hx,hy].vertices[0],hx,hy,(times*7)+0);
+		addVertex(map.terrain[hx,hy].vertices[1],hx,hy,(times*7)+1);
+		addVertex(map.terrain[hx,hy].vertices[2],hx,hy,(times*7)+2);
+		addVertex(map.terrain[hx,hy].vertices[3],hx,hy,(times*7)+3);
+		addVertex(map.terrain[hx,hy].vertices[4],hx,hy,(times*7)+4);
+		addVertex(map.terrain[hx,hy].vertices[5],hx,hy,(times*7)+5);
+		addVertex(map.terrain[hx,hy].vertices[6],hx,hy,(times*7)+6);
+
+		for (int i=0; i<7; i++) {
+			map.terrain[hx,hy].id_list[i] = (times*7)+i;
+		}
+
 		newTriangles.Add (times*7 + 1);
 		newTriangles.Add (times*7 + 0);
 		newTriangles.Add (times*7 + 3);
@@ -193,152 +167,6 @@ public class World7 : MonoBehaviour {
 //		addTriangles(hx,hy);
 		addColor(hx,hy,7);
 		times ++;
-		
-//		if (hy == 0 && hx == 0) {
-//
-//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//			addTriangles(hx,hy);
-//			addColor(hx,hy,7);
-//
-//		} else if (hy == 0 && hx != 0) {
-//
-//			
-//			map.terrain[hx,hy].vertices[1] = map.terrain[hx-1, hy].vertices[2];
-//			map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-//			addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//			addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//			addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//			addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//			addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//			addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//			addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//			addTriangles(hx,hy);
-//			addColor(hx,hy,7);
-//				
-//
-//		} else if (!odd) {
-//				//even hex in y direc
-//
-//			if (hy != 0 && hx == 0) {
-//
-//				
-//				map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [4];
-//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices [6];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//				addTriangles(hx,hy);
-//				addColor(hx,hy,7);
-//
-//			} else if (hy != 0 && hx != 0) {
-//
-//				map.terrain[hx, hy].vertices [0] = map.terrain[hx-1, hy - 1].vertices [5];
-//				map.terrain[hx, hy].vertices [1] = map.terrain[hx - 1, hy].vertices [2];
-//				map.terrain[hx, hy].vertices [2] = map.terrain[hx, hy - 1].vertices[6];
-//				map.terrain[hx, hy].vertices[4] = map.terrain[hx - 1, hy].vertices[5];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//
-//				addTriangles(hx,hy);
-//				addColor(hx,hy,7);	
-//
-//			} else if (hx != 0 && hy != num_col - 1) {
-//					print ("[ERROR] uncaught scenario in hex make: Code 1");
-//					return;
-//
-//			} else {
-//					print ("[ERROR] uncaught scenario in hex make: Code 2");
-//					return;
-//			}
-//
-//		} else {
-//				//odd hex in y direc
-//
-//				if (hy != 0 && hx == 0 && hx != num_row - 1) {	
-//
-//						map.terrain[hx, hy].vertices [0] = map.terrain[hx, hy - 1].vertices [5];
-//						map.terrain[hx, hy].vertices [1] = map.terrain[hx, hy - 1].vertices [6];
-//						map.terrain[hx, hy].vertices [2] = map.terrain[hx + 1, hy - 1].vertices [6];
-//
-//						addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//						addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//						addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//						addVertex(map.terrain[hx, hy].vertices[3],hx,hy,3);
-//						addVertex(map.terrain[hx, hy].vertices[4],hx,hy,4);
-//						addVertex(map.terrain[hx, hy].vertices[5],hx,hy,5);
-//						addVertex(map.terrain[hx, hy].vertices[6],hx,hy,6);
-//						addTriangles(hx,hy);
-//						addColor(hx,hy,7);				
-//		
-//				} else if (hy!=0 && hx==num_row-1 && hx==0){
-//
-//				map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//				map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//				addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//				addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//				addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//				addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//				addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//				addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//				addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//				addTriangles(hx,hy);	
-//				addColor(hx,hy,7);
-//
-//				} else if(hy!=0 && hx == num_row-1){
-//
-//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//					addVertex(map.terrain[hx,hy].vertices[1], hx,hy,1);
-//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//					addTriangles(hx,hy);
-//					addColor(hx,hy,7);
-//		
-//				} else if(hy!=0 && hx!=num_row-1){
-//
-//					map.terrain[hx,hy].vertices[0] = map.terrain[hx,hy-1].vertices[5];
-//					map.terrain[hx,hy].vertices[1] = map.terrain[hx,hy-1].vertices[6];
-//					map.terrain[hx, hy].vertices [2] = map.terrain[hx+1,hy-1].vertices[6];
-//					map.terrain[hx,hy].vertices[4] = map.terrain[hx-1,hy].vertices[5];
-//					addVertex(map.terrain[hx,hy].vertices[0],hx,hy,0);
-//					addVertex(map.terrain[hx,hy].vertices[1],hx,hy,1);
-//					addVertex(map.terrain[hx,hy].vertices[2],hx,hy,2);
-//					addVertex(map.terrain[hx,hy].vertices[3],hx,hy,3);
-//					addVertex(map.terrain[hx,hy].vertices[4],hx,hy,4);
-//					addVertex(map.terrain[hx,hy].vertices[5],hx,hy,5);
-//					addVertex(map.terrain[hx,hy].vertices[6],hx,hy,6);
-//					addTriangles(hx,hy);
-//					addColor(hx,hy,7);
-//		
-//				} else{
-//					print ("uncaught scenario in hex make");
-//					return;
-//				}
-//
-//		}
 
 	}
 
@@ -371,28 +199,10 @@ public class World7 : MonoBehaviour {
 	}
 
 	public static void addColor(int x, int y, int count){
-		/*Color rand = new Color( UnityEngine.Random.Range(0.0f, 1.0f),
-			UnityEngine.Random.Range(0.0f,1.0f),
-			UnityEngine.Random.Range(0.0f,1.0f), 
-			UnityEngine.Random.Range(0.0f,1.0f));*/
-//		Color color = new Color();
-//
-//		if (map.terrain [x, y].type == "water") {
-//			color = Color.cyan;
-//		} else if (map.terrain [x, y].type == "sand") {
-//			color = Color.yellow;
-//		}else if (map.terrain [x, y].type == "grass") {
-//			color = Color.green;
-//		}else if (map.terrain [x, y].type == "rock") {
-//			color = Color.gray;
-//		}else if (map.terrain [x, y].type == "snow") {
-//			color = Color.white;
-//		} else {
-//			color = Color.magenta;
-//		}
 
 		for (int i=0; i < count; i++) {
-			Color tri = ColorGenerator.getColorFromString (map.terrain [x, y].type);
+//			Color tri = ColorGenerator.getColorFromString (map.terrain [x, y].type);
+			Color tri = Color.clear;
 //			for (int j=0; j < 3; j++){
 				newColor.Add (tri);
 //			}
@@ -423,6 +233,30 @@ public class World7 : MonoBehaviour {
 		//newUV.Clear();
 		newColor.Clear ();
 
+	}
+
+	// Should be Used to change colors of a hex or something in the map
+	// 
+	public static void changeColors(){
+		Color[] c = (Color[])mesh.colors.Clone ();
+		Vector3[] v = (Vector3[])mesh.vertices.Clone ();
+		for(int i=0; i<300; i++){
+			mesh.colors[i] = new Color(0f,99f,1f);
+			v[i] = v[i] + new Vector3(0f,-1f,0f);
+		}
+//		mesh.colors = c;
+		mesh.vertices = v;
+
+	}
+
+	public static void setColorAtIndex(string type, int id){
+		Color[] c = (Color[])mesh.colors.Clone ();
+		Vector3[] v = (Vector3[])mesh.vertices.Clone ();
+		for(int i=0; i<300; i++){
+			c[i] = new Color(0f,99f,1f);
+			v[i] = v[i] + new Vector3(0f,-1f,0f);
+		}
+		mesh.colors = c;
 	}
 	
 }

@@ -26,7 +26,7 @@ public class Nature : Player
 	override public void move()
 	{
 		foreach (Animal ani in animals) {
-			ani.move();
+			ani.move(0);
 		}
 	}
 
@@ -71,6 +71,9 @@ public class Nature : Player
 			}
 	}
 
+	override public void discoveredHex(Hex hex){
+	}
+
 	override public void removeUnit(Unit unit){
 		Debug.Log ("length before killed: " + animals.Count);
 		unit.on_hex.unit = null;
@@ -78,5 +81,4 @@ public class Nature : Player
 		animals.Remove ((Animal)unit);
 		Debug.Log ("length after killed : " + animals.Count);
 	}
-
 }

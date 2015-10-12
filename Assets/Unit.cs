@@ -22,21 +22,25 @@ using UnityEngine;
 		
 
 		// STATS
-		public string name = "Tribesman";
+		public string name = "";
 		public int moves = 0;
-		public int max_moves = 2;
-		public int health = 10;
-		public int health_recovery_per_turn = 2;
-		public int hunger = 0;
-		public int hunger_per_turn = 1;
-		public int max_health = 10;
+		public int max_moves = 0;
 
-		public int strength = 20;
-		public int defend = 1;
+
+		public int health = 0;
+		public int health_recovery_per_turn = 0;
+		public int hunger = 0;
+		public int hunger_per_turn = 0;
+		public int max_health = 0;
+
+		public int strength = 0;
+		public int defend;
 
 		public GameObject unit_marker;
 
 		public Player player;
+
+		public List<Hex> hexes_unit_can_see = new List<Hex>();
 
 		public Unit ()
 		{
@@ -94,14 +98,15 @@ using UnityEngine;
 		unit_marker.transform.position = vector;
 		this.on_hex = hex;
 		hex.unit = this;
+
 	}
 
 	public void move(Hex hex){
 		if (on_hex == hex) {
 			return;
 		}
+		Debug.Log (on_hex.getTileInfo ());
 		int distance = (int)Vector2.Distance (on_hex.pos, hex.pos);
-		Debug.Log ("distance: " + distance);
 		int temp_move = Mathf.RoundToInt(moves -  distance);
 		if (temp_move < 0) {
 			return;
@@ -123,11 +128,49 @@ using UnityEngine;
 		this.on_hex.unit = null;
 		this.on_hex = hex;
 		hex.unit = this;
+		player.discoveredHex (hex);
+		GameEngine.selected_hex = hex;
+
+		canSeeHex (hex);
+	}
+
+	public void canSeeHex(Hex hex){
+
+		foreach(Hex temp in hexes_unit_can_see){
+			if(hex.hasUnit () && hex != temp){
+				temp.unit.invisible();
+			}
+		}
+
+		hexes_unit_can_see = new List<Hex>();
+//		if(hex.hasUnit ()){
+		hex.unit.visible ();
+//		}
+		hexes_unit_can_see.Add(hex);
+			
+		foreach (Hex neighbor in hex.getNeighbors()) {
+			if(neighbor.hasUnit ()){
+				Debug.Log ("unit!");
+				neighbor.unit.invisible();
+			}
+				hexes_unit_can_see.Add(neighbor);
+				foreach(Hex neighbor2 in neighbor.getNeighbors()){
+					hexes_unit_can_see.Add(neighbor2);
+					if(neighbor2.hasUnit () && neighbor2 != hex){
+					Debug.Log ("unit2!");
+						neighbor2.unit.invisible();
+					}
+				}
+		}
+
 	}
 
 	public void attack(Hex hex){
 		hex.unit.health -= (this.strength-hex.unit.defend);
-		this.health -= hex.unit.defend;
+		this.health -= hex.unit.strength - this.defend;
+
+		Debug.Log ("" + this.name + " attacks " + hex.unit.name + " with Strength " + this.strength + " against " + hex.unit.strength);
+
 		if (hex.unit.health < 0) {
 			hex.unit.killed();
 			this.move (hex);
@@ -154,6 +197,16 @@ using UnityEngine;
 
 	public string getInfo(){
 		return "" + this.getName () + "\nMoves: " + this.moves + "\nHealth: " + this.health;
+	}
+
+	public void invisible(){
+//				unit_marker.SetActive (false);
+		unit_marker.GetComponent<MeshRenderer>().enabled = false;
+	}
+
+	public void visible(){
+//				unit_marker.SetActive (true);
+		unit_marker.GetComponent<MeshRenderer>().enabled = true;
 	}
 
 }

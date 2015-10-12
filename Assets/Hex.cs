@@ -224,26 +224,39 @@ public class Hex {
 	public List<Hex> getNeighbors(){
 		Hex[,] terrain = GameEngine.map.terrain;
 		List<Hex> neighbor_hexes = new List<Hex> ();
-		Debug.Log ("Getting neighbors");
+		if (((int)pos.y) % 2 == 0) {
+			if (terrain[(int)pos.x,(int)pos.y+1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y+1]);
+			}
+			if (terrain[(int)pos.x-1,(int)pos.y+1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x-1,(int)pos.y+1]);
+			}
+			if (terrain[(int)pos.x,(int)pos.y-1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y-1]);
+			}
+			if (terrain[(int)pos.x-1, (int)pos.y-1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y-1]);
+			}
+		} else {
+			if (terrain[(int)pos.x+1,(int)pos.y+1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x+1,(int)pos.y+1]);
+			}
+			if (terrain[(int)pos.x,(int)pos.y+1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y+1]);
+			}
+			if (terrain[(int)pos.x+1,(int)pos.y-1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x+1,(int)pos.y-1]);
+			}
+			if (terrain[(int)pos.x, (int)pos.y-1] != null) {
+				neighbor_hexes.Add (terrain[(int)pos.x, (int)pos.y-1]);
+			}
+		}
 		if (terrain [(int)pos.x + 1, (int)pos.y] != null) {
 			neighbor_hexes.Add (terrain [(int)pos.x + 1, (int)pos.y]);
-		}
-		if (terrain[(int)pos.x,(int)pos.y+1] != null) {
-			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y+1]);
-		}
-		if (terrain[(int)pos.x-1,(int)pos.y+1] != null) {
-			neighbor_hexes.Add (terrain[(int)pos.x-1,(int)pos.y+1]);
 		}
 		if (terrain[(int)pos.x-1, (int)pos.y] != null) {
 			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y]);
 		}
-		if (terrain[(int)pos.x,(int)pos.y-1] != null) {
-			neighbor_hexes.Add (terrain[(int)pos.x,(int)pos.y-1]);
-		}
-		if (terrain[(int)pos.x-1, (int)pos.y-1] != null) {
-			neighbor_hexes.Add (terrain[(int)pos.x-1, (int)pos.y-1]);
-		}
-
 		return neighbor_hexes;
 	}
 

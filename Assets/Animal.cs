@@ -14,14 +14,15 @@ using UnityEngine;
 	{
 	//Stats
 	public int health = 10;
-	public int health_recovery_per_turn = 1;
+	public int health_recovery_per_turn = 2;
 	public int hunger_per_turn = 0;
 	public int max_health = 10;
-	public int strength = 3;
+	public int strength = 5;
 	public int defend = 1;
 
 		public Animal ()
 		{
+			this.name = "Animal";
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = new Vector3(-1000,-1000,0);
 			this.unit_marker.GetComponent<Renderer>().material.color = ColorGenerator.getColorFromString ("animal");
@@ -32,6 +33,9 @@ using UnityEngine;
 		{
 			this.name = "Animal";
 			this.max_moves = 1;
+		this.strength = 5;
+		this.defend = 1;
+		this.health_recovery_per_turn = 2;
 			this.unit_marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			this.unit_marker.transform.position = vector;
 			this.vector = vector;
@@ -47,6 +51,7 @@ using UnityEngine;
 			
 			this.on_hex = GameEngine.map.terrain [this.hex_coordinates_x, this.hex_coordinates_y];
 			GameUtils.destroyCollider (this.unit_marker);
+//			unit_marker.SetActive (false);
 
 		}
 		
@@ -77,74 +82,80 @@ using UnityEngine;
 			hex.unit = this;
 		}
 		
-		public void move() {
+		public void move(int n) {
+		if (n > 1000) {
+			return;
+		}
 			int r = Random.Range (0, 6);
+		if (Random.Range (0, 10) < 3) {
+			r = 0;
+		}
 			Vector2 position = on_hex.pos;
 			int x = (int)position.x;
 			int y = (int)position.y;
 			switch (r) {
 				case 0:
 					if(x+1 >= GameEngine.num_row){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if(GameEngine.map.terrain[x+1, y].hasUnit()){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x+1, y]);
 					break;
 				case 1:
 					if(y+1 >= GameEngine.num_col){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if(GameEngine.map.terrain[x, y+1].hasUnit()){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x, y+1]);
 					break;
 				case 2:
 					if(x-1 <= 0 || y+1 >= GameEngine.num_col){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y+1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1,y+1]);
 					break;
 				case 3:
 					if(x-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1,y]);
 					break;
 				case 4:
 					if(x-1 <= 0 || y-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x-1, y-1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x-1, y-1]);
 					break;
 				case 5:
 					if(y-1 <= 0){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					if( GameEngine.map.terrain[x, y-1].hasUnit() ){
-						this.move ();
+						this.move (n+1);
 						break;
 					}
 					move (GameEngine.map.terrain[x, y-1]);
@@ -158,6 +169,16 @@ using UnityEngine;
 		{
 			return "Animal on: " + this.hex_coordinates_x + " " + this.hex_coordinates_y + " with vector: " + this.vector;
 		}
+
+	public void invisible(){
+		//				unit_marker.SetActive (false);
+		unit_marker.GetComponent<Renderer>().enabled = false;
+	}
+	
+	public void visible(){
+		//				unit_marker.SetActive (true);
+		unit_marker.GetComponent<Renderer>().enabled = true;
+	}
 
 	}
 

@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public abstract class Player
 {
@@ -8,11 +8,17 @@ public abstract class Player
 	public Unit[] units;
 	public int available;
 	public int unit_counter = 0;
+	public Culture culture;
+	public Hex[,] discovered;
+	public Color[] colors;
 
 	public Player (string name) {
 		this.playerName = name;
 		available = 0;
 		units = new Unit[0];
+		discovered = new Hex[GameEngine.num_row, GameEngine.num_col];
+		colors = (Color[])World7.mesh.colors.Clone ();
+		culture = new Culture ();
 	}
 
 	string getPlayerName ()
@@ -24,7 +30,6 @@ public abstract class Player
 	{
 		is_players_turn = false;
 		move ();
-		Debug.Log (this.playerName + " Turn was Ended");
 	}
 
 	public void startPlayersTurn()
@@ -33,9 +38,8 @@ public abstract class Player
 		for (int i=0; i < units.Length; i++) {
 			units[i].resetMove();
 		}
-		Debug.Log (this.playerName + " Turn was Started");
 	}
-
+	public abstract void discoveredHex(Hex hex);
 	public abstract void removeUnit(Unit unit);
 	public abstract void move();
 	public abstract void setupUnits(Map map, Hex hex);

@@ -30,6 +30,9 @@ public class AI : Player
 	override public void setupUnits(Map map){}
 
 	override public void removeUnit(Unit unit){}
+
+	override public void discoveredHex(Hex hex){
+	}
 }
 
 

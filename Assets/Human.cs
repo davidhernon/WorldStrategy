@@ -30,14 +30,15 @@ public class Human : Player
 
 	override public void setupUnits(Map map, Hex hex)
 	{
-		this.units = new Unit[1];
-		Unit new_unit = new Unit (hex);
+		this.units = new Tribesperson[1];
+		Tribesperson new_unit = new Tribesperson (hex);
 		this.units [0] = new_unit;
-		hex.setUnit((Unit)this.units [0]);
+		hex.setUnit(this.units [0]);
 		available--;
 		unit_counter++;
 		this.units [0].id = unit_counter;
 		this.units [0].player = this;
+		this.discoveredHex (hex);
 	}
 
 	override public void setupUnits(Map map){
@@ -49,50 +50,38 @@ public class Human : Player
 		available++;
 	}
 
+	override public void discoveredHex(Hex hex){
+		Color[] c = (Color[])World7.mesh.colors.Clone ();
+		if (discovered [(int)hex.pos.x, (int)hex.pos.y] == null) {
+			for (int i=0; i<7; i++) {
+				//			c [i] = ColorGenerator.getColorFromString(hex.type);
+				Color cl = ColorGenerator.getColorFromString (hex.type);
+				c [hex.id_list [i]] = cl;
+			}
+			discovered [(int)hex.pos.x, (int)hex.pos.y] = hex;
+		}
+
+//		Hex[] neighb = hex.getNeighbors ();
+//		for (int j=0; j<neighb.Length; j++) {
+		foreach (Hex neighbor in hex.getNeighbors()) {
+			if (discovered [(int)neighbor.pos.x, (int)neighbor.pos.y] == null) {
+				discovered[(int)neighbor.pos.x, (int)neighbor.pos.y] = neighbor;
+				for (int i=0; i<7; i++) {
+					Color cl = ColorGenerator.getColorFromString(neighbor.type);
+					c[neighbor.id_list[i]] = cl;
+				}
+			}
+			foreach(Hex neighbor2 in neighbor.getNeighbors()){
+				discovered[(int)neighbor2.pos.x, (int)neighbor2.pos.y] = neighbor;
+				for (int i=0; i<7; i++) {
+					Color cl = ColorGenerator.getColorFromString(neighbor2.type);
+					c[neighbor2.id_list[i]] = cl;
+				}
+			}
+
+		}
+//		}?
+		World7.mesh.colors = c;
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

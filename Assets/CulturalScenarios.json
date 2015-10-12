@@ -1,0 +1,19 @@
+[
+  {
+    "prompt": "You take in an alledged murderer but soon suspect him to be innocent",
+    "choice1": [
+      {
+      "string": "keep your oath and return the captive",
+      "precept": "",
+      "modifier": ""
+    }
+    ],
+    "choice2": [
+      {
+      "string": "surrender the benefits and let him go",
+      "precept": "",
+      "modifier": ""
+      }
+    ]
+  }
+]

@@ -50,6 +50,7 @@
      <Compile Include="Assets\Astar.cs" />
      <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\ColorGenerator.cs" />
+     <Compile Include="Assets\Culture.cs" />
      <Compile Include="Assets\GameEngine.cs" />
      <Compile Include="Assets\GameStart.cs" />
      <Compile Include="Assets\GameUtils.cs" />
@@ -61,9 +62,11 @@
      <Compile Include="Assets\Nature.cs" />
      <Compile Include="Assets\Noise.cs" />
      <Compile Include="Assets\Player.cs" />
+     <Compile Include="Assets\Scenario.cs" />
      <Compile Include="Assets\SimplexnoiseGenerator.cs" />
      <Compile Include="Assets\Sources\LightningBolt.cs" />
      <Compile Include="Assets\TerrainFunctions.cs" />
+     <Compile Include="Assets\TribesPerson.cs" />
      <Compile Include="Assets\UIManager.cs" />
      <Compile Include="Assets\UIState.cs" />
      <Compile Include="Assets\Unit.cs" />
@@ -77,6 +80,8 @@
      <Compile Include="Assets\World6.cs" />
      <Compile Include="Assets\World7.cs" />
      <None Include="Assets\Shader2.shader" />
+     <None Include="Assets\Vertex.shader" />
+     <None Include="Assets\AShader.shader" />
      <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Vertex Colored.shader" />
      <None Include="Assets\Crossfade.shader" />
